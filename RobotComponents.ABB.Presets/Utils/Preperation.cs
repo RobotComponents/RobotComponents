@@ -10,20 +10,21 @@
 // For license details, see the LICENSE file in the project root.
 
 // System Libs
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
+// Eto Libs
+using Eto.Forms;
 // Rhino Libs
 using Rhino;
 using Rhino.DocObjects;
 using Rhino.DocObjects.Tables;
 using Rhino.Geometry;
-// Eto Libs
-using Eto.Forms;
 // Robot Components Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Presets.Enumerations;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using static RobotComponents.ABB.Presets.Utils.HelperMethods;
 using static RobotComponents.Utils.MeshPreperation;
 
 namespace RobotComponents.ABB.Presets.Utils
@@ -31,7 +32,7 @@ namespace RobotComponents.ABB.Presets.Utils
     /// <summary>
     /// Represents methods to prepare the robot meshes. 
     /// </summary>
-    public static class MeshPreperation
+    public static class Preperation
     {
         #region fields
         private static readonly MeshingParameters _meshingParameters = new MeshingParameters
@@ -520,6 +521,152 @@ namespace RobotComponents.ABB.Presets.Utils
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Generates the robot preset code lines. 
+        /// </summary>
+        /// <param name="robot"> The robot to write the codelines for. </param>
+        /// <param name="className"> The class name. </param>
+        /// <returns> The template as a list with code lines. </returns>
+        [Obsolete("Warning: Use this method carefully. It is intended for developer use only and may change without notice.", false)]
+        public static List<string> GenerateRobotPresetCodeLines(Robot robot, out string className)
+        {
+            className = GetRobotClassNameFromName(robot.Name);
+
+            List<string> lines = new List<string>
+            {
+                "// SPDX-License-Identifier: GPL-3.0-or-later",
+                "// This file is part of Robot Components",
+                "// Project: https://github.com/RobotComponents/RobotComponents",
+                "//",
+               $"// Copyright (c) {DateTime.Now.Year} Arjen Deetman",
+                "//",
+                "// Authors:",
+               $"//   - Arjen Deetman ({DateTime.Now.Year})",
+                "//",
+                "// For license details, see the LICENSE file in the project root.",
+                "",
+                "// System Libs",
+                "using System.Collections.Generic;",
+                "// Rhino Libs",
+                "using Rhino.Geometry;",
+                "",
+                "namespace RobotComponents.ABB.Presets.Robots",
+                "{",
+                "    /// <summary>",
+               $"    /// Represent the robot data of the {robot.Name}.",
+                "    /// </summary>",
+               $"    public class {className} : RobotPresetData",
+                "    {",
+                "        #region properties",
+                "        /// <summary>",
+                "        /// Gets the name of the Robot.",
+                "        /// </summary>",
+                "        public override string Name",
+                "        {",
+               $"            get {{ return \"{robot.Name}\"; }}",
+                "        }",
+                "",
+                "        /// <summary>",
+                "        /// Gets the kinematics parameters.",
+                "        /// </summary>",
+               $"        public override double[] KinematicParameters => new double[] {{ {robot.A1}, {robot.A2}, {robot.A3}, {robot.B}, {robot.C1}, {robot.C2}, {robot.C3}, {robot.C4} }};",
+
+                "",
+                "        /// <summary>",
+                "        /// Gets the axis limits.",
+                "        /// </summary>",
+                "        public override List<Interval> AxisLimits => new List<Interval>",
+                "        {",
+               $"            new Interval({robot.InternalAxisLimits[0].T0}, {robot.InternalAxisLimits[0].T1}),",
+               $"            new Interval({robot.InternalAxisLimits[1].T0}, {robot.InternalAxisLimits[1].T1}),",
+               $"            new Interval({robot.InternalAxisLimits[2].T0}, {robot.InternalAxisLimits[2].T1}),",
+               $"            new Interval({robot.InternalAxisLimits[3].T0}, {robot.InternalAxisLimits[3].T1}),",
+               $"            new Interval({robot.InternalAxisLimits[4].T0}, {robot.InternalAxisLimits[4].T1}),",
+               $"            new Interval({robot.InternalAxisLimits[5].T0}, {robot.InternalAxisLimits[5].T1})",
+                "        };",
+                "",
+                "        /// <summary>",
+                "        /// Gets the name of the Mesh resources embedded in the assembly.",
+                "        /// </summary>",
+                "        public override string[] MeshResources => new[]",
+                "        {",
+               $"            \"{className}_{_layerNamesRobotLinks[0]}\",",
+               $"            \"{className}_{_layerNamesRobotLinks[1]}\",",
+               $"            \"{className}_{_layerNamesRobotLinks[2]}\",",
+               $"            \"{className}_{_layerNamesRobotLinks[3]}\",",
+               $"            \"{className}_{_layerNamesRobotLinks[4]}\",",
+               $"            \"{className}_{_layerNamesRobotLinks[5]}\",",
+               $"            \"{className}_{_layerNamesRobotLinks[6]}\"",
+                "        };",
+                "        #endregion",
+                "    }",
+                "}"
+            };
+
+            return lines;
+        }
+
+        /// <summary>
+        /// Generates and writes the code lines of all existing robot presets.
+        /// </summary>
+        /// <param name="directory">The target directory path.</param>
+        [Obsolete("Warning: Use this method carefully. It is intended for developer use only and may change without notice.", false)]
+        public static void WriteCodeLinesOfAllExistingRobotPresets(string directory)
+        {
+            if (string.IsNullOrWhiteSpace(directory))
+            {
+                throw new ArgumentException("Directory cannot be null or empty.", nameof(directory));
+            }
+
+            List<RobotPreset> robotPresets = Enum.GetValues(typeof(RobotPreset))
+                                     .Cast<RobotPreset>()
+                                     .Where(p => p != RobotPreset.EMPTY) // Skip EMPTY
+                                     .ToList();
+
+            for (int i = 0; i < robotPresets.Count; i++)
+            {
+                RobotPreset preset = robotPresets[i];
+                Robot robot = Factory.GetRobotPreset(preset, Plane.WorldXY, new RobotTool(), new List<IExternalAxis>() { });
+                List<string> codeLines = GenerateRobotPresetCodeLines(robot, out string className);
+                WriteCodeToFile(codeLines, className, directory);
+            }
+
+        }
+
+        /// <summary>
+        /// Writes generated robot preset code lines to a .cs file.
+        /// </summary>
+        /// <param name="codeLines">The code lines to write.</param>
+        /// <param name="fileName">The file name without extension.</param>
+        /// <param name="directory">The target directory path.</param>
+        [Obsolete("Warning: Use this method carefully. It is intended for developer use only and may change without notice.", false)]
+        public static void WriteCodeToFile(List<string> codeLines, string fileName, string directory)
+        {
+            if (codeLines == null || codeLines.Count == 0)
+            {
+                throw new ArgumentException("Code lines cannot be null or empty.", nameof(codeLines));
+            }
+
+            if (string.IsNullOrWhiteSpace(fileName))
+            {
+                throw new ArgumentException("File name cannot be null or empty.", nameof(fileName));
+            }
+
+            if (string.IsNullOrWhiteSpace(directory))
+            {
+                throw new ArgumentException("Directory cannot be null or empty.", nameof(directory));
+            }
+
+            // Ensure directory exists
+            Directory.CreateDirectory(directory);
+
+            // Build full path with .cs extension
+            string filePath = Path.Combine(directory, $"{fileName}.cs");
+
+            // Write all lines
+            File.WriteAllLines(filePath, codeLines);
         }
         #endregion
     }

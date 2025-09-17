@@ -17,9 +17,9 @@ using Rhino.Geometry;
 namespace RobotComponents.ABB.Presets.Robots
 {
     /// <summary>
-    /// Represent the robot data of the IRB5710-90/2.7.
+    /// Represent the robot data of the IRB1010-1.5/0.37.
     /// </summary>
-    public class IRB5710_90_270 : RobotPresetData
+    public class IRB1010_1_5_037 : RobotPresetData
     {
         #region properties
         /// <summary>
@@ -27,13 +27,13 @@ namespace RobotComponents.ABB.Presets.Robots
         /// </summary>
         public override string Name
         {
-            get { return "IRB5710-90/2.7"; }
+            get { return "IRB1010-1.5/0.37"; }
         }
 
         /// <summary>
         /// Gets the kinematics parameters.
         /// </summary>
-        public override double[] KinematicParameters => new double[] { 280, -180, -0, 0, 670, 950, 1460, 160 };
+        public override double[] KinematicParameters => new double[] { 0, -0, -0, 0, 190, 185, 185, 45 };
 
         /// <summary>
         /// Gets the axis limits.
@@ -41,11 +41,11 @@ namespace RobotComponents.ABB.Presets.Robots
         public override List<Interval> AxisLimits => new List<Interval>
         {
             new Interval(-170, 170),
-            new Interval(-75, 145),
-            new Interval(-180, 70),
-            new Interval(-300, 300),
-            new Interval(-130, 130),
-            new Interval(-360, 360)
+            new Interval(-75, 125),
+            new Interval(-180, 50),
+            new Interval(-170, 170),
+            new Interval(-125, 125),
+            new Interval(-242, 242)
         };
 
         /// <summary>
@@ -53,13 +53,13 @@ namespace RobotComponents.ABB.Presets.Robots
         /// </summary>
         public override string[] MeshResources => new[]
         {
-            "IRB5710_90_270_link_0",
-            "IRB5710_90_270_link_1",
-            "IRB5710_90_270_link_2",
-            "IRB5710_90_270_link_3",
-            "IRB5710_90_270_link_4",
-            "IRB5710_90_270_link_5",
-            "IRB5710_90_270_link_6"
+            "IRB1010_1_5_037_link_0",
+            "IRB1010_1_5_037_link_1",
+            "IRB1010_1_5_037_link_2",
+            "IRB1010_1_5_037_link_3",
+            "IRB1010_1_5_037_link_4",
+            "IRB1010_1_5_037_link_5",
+            "IRB1010_1_5_037_link_6"
         };
         #endregion
     }

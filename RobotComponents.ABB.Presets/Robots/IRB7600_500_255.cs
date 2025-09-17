@@ -1,162 +1,66 @@
-﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// SPDX-License-Identifier: GPL-3.0-or-later
 // This file is part of Robot Components
 // Project: https://github.com/RobotComponents/RobotComponents
 //
-// Copyright (c) 2020 EDEK Uni Kassel
-// Copyright (c) 2020-2025 Arjen Deetman
+// Copyright (c) 2025 Arjen Deetman
 //
 // Authors:
-//   - Arjen Deetman (2020-2025)
+//   - Arjen Deetman (2025)
 //
 // For license details, see the LICENSE file in the project root.
 
 // System Libs
-using System;
 using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
-// Robot Components Libs
-using RobotComponents.ABB.Definitions;
 
 namespace RobotComponents.ABB.Presets.Robots
 {
     /// <summary>
-    /// Represents a collection of methods to get the IRB7600-500/2.55 Robot instance.
+    /// Represent the robot data of the IRB7600-500/2.55.
     /// </summary>
-    public static class IRB7600_500_255
+    public class IRB7600_500_255 : RobotPresetData
     {
+        #region properties
         /// <summary>
-        /// Returns a new IRB7600-500/2.55 Robot instance.
+        /// Gets the name of the Robot.
         /// </summary>
-        /// <param name="positionPlane"> The position and orientation of the Robot in world coordinate space. </param>
-        /// <param name="tool"> The Robot Tool. </param>
-        /// <param name="externalAxes"> The external axes attached to the Robot. </param>
-        /// <returns> The Robot preset. </returns>
-        public static Robot GetRobot(Plane positionPlane, RobotTool tool = null, IList<IExternalAxis> externalAxes = null)
+        public override string Name
         {
-            string name = "IRB7600-500/2.55";
-            List<Mesh> meshes = GetMeshes();
-            List<Plane> axisPlanes = GetAxisPlanes();
-            List<Interval> axisLimits = GetAxisLimits();
-            Plane mountingFrame = GetToolMountingFrame();
-
-            // Check Robot Tool data
-            if (tool == null)
-            {
-                tool = new RobotTool();
-            }
-
-            // Make empty list with external axes if the value is null
-            if (externalAxes == null)
-            {
-                externalAxes = new List<IExternalAxis>() { };
-            }
-
-            // Override the position plane when an external axis is coupled that moves the robot
-            for (int i = 0; i < externalAxes.Count; i++)
-            {
-                if (externalAxes[i].MovesRobot == true)
-                {
-                    positionPlane = externalAxes[i].AttachmentPlane;
-                    break;
-                }
-            }
-
-            Robot robot = new Robot(name, meshes, axisPlanes, axisLimits, Plane.WorldXY, mountingFrame, tool, externalAxes);
-            Transform trans = Transform.PlaneToPlane(Plane.WorldXY, positionPlane);
-            robot.Transform(trans);
-
-            return robot;
+            get { return "IRB7600-500/2.55"; }
         }
 
         /// <summary>
-        /// Defines the base and link meshes in robot coordinate space. 
+        /// Gets the kinematics parameters.
         /// </summary>
-        /// <returns> The list with robot meshes. </returns>
-        public static List<Mesh> GetMeshes()
-        {
-            List<Mesh> meshes = new List<Mesh>
-            {
-                Mesh.FromJSON(Properties.Resources.IRB7600_500_255_link_0) as Mesh,
-                Mesh.FromJSON(Properties.Resources.IRB7600_500_255_link_1) as Mesh,
-                Mesh.FromJSON(Properties.Resources.IRB7600_500_255_link_2) as Mesh,
-                Mesh.FromJSON(Properties.Resources.IRB7600_500_255_link_3) as Mesh,
-                Mesh.FromJSON(Properties.Resources.IRB7600_500_255_link_4) as Mesh,
-                Mesh.FromJSON(Properties.Resources.IRB7600_500_255_link_5) as Mesh,
-                Mesh.FromJSON(Properties.Resources.IRB7600_500_255_link_6) as Mesh,
-            };
-
-            return meshes;
-        }
+        public override double[] KinematicParameters => new double[] { 410, -165, -0, 0, 780, 1075, 1056, 250 };
 
         /// <summary>
-        /// Returns the list with axis limits.  
+        /// Gets the axis limits.
         /// </summary>
-        /// <returns> The list with axis limits. </returns>
-        public static List<Interval> GetAxisLimits()
+        public override List<Interval> AxisLimits => new List<Interval>
         {
-            List<Interval> axisLimits = new List<Interval>
-            {
-                new Interval(-180, 180),
-                new Interval(-60, 85),
-                new Interval(-180, 60),
-                new Interval(-300, 300),
-                new Interval(-100, 100),
-                new Interval(-360, 360)
-            };
-
-            return axisLimits;
-        }
+            new Interval(-180, 180),
+            new Interval(-60, 85),
+            new Interval(-180, 60),
+            new Interval(-300, 300),
+            new Interval(-100, 100),
+            new Interval(-360, 360)
+        };
 
         /// <summary>
-        /// Returns the list with the axis planes in robot coordinate space. 
+        /// Gets the name of the Mesh resources embedded in the assembly.
         /// </summary>
-        /// <returns> Returns a list with planes. </returns>
-        public static List<Plane> GetAxisPlanes()
+        public override string[] MeshResources => new[]
         {
-            List<Plane> axisPlanes = new List<Plane>() { };
-
-            // Axis 1
-            axisPlanes.Add(new Plane(
-                new Point3d(0, 0, 0),
-                new Vector3d(0, 0, 1)));
-            // Axis 2
-            axisPlanes.Add(new Plane(
-                new Point3d(410, 0, 780),
-                new Vector3d(0, 1, 0)));
-            // Axis 3
-            axisPlanes.Add(new Plane(
-                new Point3d(410, 0, 780 + 1075),
-                new Vector3d(0, 1, 0)));
-            // Axis 4
-            axisPlanes.Add(new Plane(
-                new Point3d(669, 0, 780 + 1075 + 165),
-                new Vector3d(1, 0, 0)));
-            // Axis 5
-            axisPlanes.Add(new Plane(
-                new Point3d(410 + 1056, 0, 780 + 1075 + 165),
-                new Vector3d(0, 1, 0)));
-            // Axis 6
-            axisPlanes.Add(new Plane(
-                new Point3d(410 + 1056 + 250, 0, 780 + 1075 + 165),
-                new Vector3d(1, 0, 0)));
-
-            return axisPlanes;
-        }
-
-        /// <summary>
-        /// Returns the tool mounting frame in robot coordinate space.
-        /// </summary>
-        /// <returns> The tool mounting frame. </returns>
-        public static Plane GetToolMountingFrame()
-        {
-            Plane mountingFrame = new Plane(
-                new Point3d(410 + 1056 + 250, 0, 780 + 1075 + 165),
-                new Vector3d(1, 0, 0));
-
-            mountingFrame.Rotate(-0.5 * Math.PI, mountingFrame.Normal);
-
-            return mountingFrame;
-        }
+            "IRB7600_500_255_link_0",
+            "IRB7600_500_255_link_1",
+            "IRB7600_500_255_link_2",
+            "IRB7600_500_255_link_3",
+            "IRB7600_500_255_link_4",
+            "IRB7600_500_255_link_5",
+            "IRB7600_500_255_link_6"
+        };
+        #endregion
     }
 }

@@ -11,7 +11,8 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
-using RobotComponents.ABB.Presets.Robots;
+using RobotComponents.ABB.Presets;
+using RobotComponents.ABB.Presets.Enumerations;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
 using RobotComponents.ABB.Gh.Utils;
 
@@ -74,7 +75,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
 
             try
             {
-                robot = IRB7600_325_310.GetRobot(positionPlane, tool, externalAxis);
+                robot = Factory.GetRobotPreset(RobotPreset.IRB7600_325_310, positionPlane, tool, externalAxis);
             }
             catch (Exception ex)
             {

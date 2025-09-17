@@ -10,20 +10,64 @@
 // For license details, see the LICENSE file in the project root.
 
 // System Libs
-using System.Collections.Generic;
-using System.Linq;
 // Rhino Libs
 using Rhino.Geometry;
 // Robot Components Libs
 using RobotComponents.ABB.Definitions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace RobotComponents.ABB.Presets.Robots
 {
     /// <summary>
-    /// Represents a collection of methods to get the CRB15000-10/1.52 Robot instance.
+    /// Represent the robot data of the CRB15000-10/1.52.
     /// </summary>
-    public static class CRB15000_10_152
+    public class CRB15000_10_152 : RobotPresetData
     {
+        #region properties
+        /// <summary>
+        /// Gets the name of the Robot.
+        /// </summary>
+        public override string Name
+        {
+            get { return "CRB15000-10/1.52"; }
+        }
+
+        /// <summary>
+        /// Gets the kinematics parameters.
+        /// </summary>
+        public override double[] KinematicParameters => new double[] { 150, -110, -80, 0, 400, 707, 637, 101 };
+
+        /// <summary>
+        /// Gets the axis limits.
+        /// </summary>
+        public override List<Interval> AxisLimits => new List<Interval>
+        {
+            new Interval(-270, 270),
+            new Interval(-180, 180),
+            new Interval(-225, 85),
+            new Interval(-180, 180),
+            new Interval(-180, 180),
+            new Interval(-270, 270)
+        };
+
+        /// <summary>
+        /// Gets the name of the Mesh resources embedded in the assembly.
+        /// </summary>
+        public override string[] MeshResources => new[]
+        {
+            "CRB15000_10_152_link_0",
+            "CRB15000_10_152_link_1",
+            "CRB15000_10_152_link_2",
+            "CRB15000_10_152_link_3",
+            "CRB15000_10_152_link_4",
+            "CRB15000_10_152_link_5",
+            "CRB15000_10_152_link_6"
+        };
+        #endregion
+
+        #region obsolete
         /// <summary>
         /// Returns a new CRB15000-10/1.52 Robot instance. 
         /// </summary>
@@ -31,6 +75,7 @@ namespace RobotComponents.ABB.Presets.Robots
         /// <param name="tool"> The Robot Tool. </param>
         /// <param name="externalAxes"> The external axes attached to the Robot. </param>
         /// <returns> The Robot preset. </returns>
+        [Obsolete("This method is OBSOLETE and will be removed in the future.", false)]
         public static Robot GetRobot(Plane positionPlane, RobotTool tool = null, IList<IExternalAxis> externalAxes = null)
         {
             string name = "CRB15000-10/1.52";
@@ -72,6 +117,7 @@ namespace RobotComponents.ABB.Presets.Robots
         /// Returns the list with the base and link meshes of the robot in robot coordinate space.
         /// </summary>
         /// <returns> The list with robot meshes. </returns>
+        [Obsolete("This method is OBSOLETE and will be removed in the future.", false)]
         public static List<Mesh> GetMeshes()
         {
             List<Mesh> meshes = new List<Mesh>
@@ -92,6 +138,7 @@ namespace RobotComponents.ABB.Presets.Robots
         /// Returns the list with axis limits.
         /// </summary>
         /// <returns> The list with axis limits. </returns>
+        [Obsolete("This method is OBSOLETE and will be removed in the future.", false)]
         public static List<Interval> GetAxisLimits()
         {
             List<Interval> axisLimits = new List<Interval>
@@ -111,6 +158,7 @@ namespace RobotComponents.ABB.Presets.Robots
         /// Returns the list with the axis planes in robot coordinate space. 
         /// </summary>
         /// <returns> Returns a list with planes. </returns>
+        [Obsolete("This method is OBSOLETE and will be removed in the future.", false)]
         public static List<Plane> GetAxisPlanes()
         {
             Plane[] axisPlanes = Robot.GetAxisPlanesFromKinematicsParameters(Plane.WorldXY, 150, -110, -80, 0, 400, 707, 637, 101, out _);
@@ -122,11 +170,13 @@ namespace RobotComponents.ABB.Presets.Robots
         /// Returns the tool mounting frame in robot coordinate space.
         /// </summary>
         /// <returns> The tool mounting frame. </returns>
+        [Obsolete("This method is OBSOLETE and will be removed in the future.", false)]
         public static Plane GetToolMountingFrame()
         {
             Robot.GetAxisPlanesFromKinematicsParameters(Plane.WorldXY, 150, -110, -80, 0, 400, 707, 637, 101, out Plane mountingFrame);
 
             return mountingFrame;
         }
+        #endregion
     }
 }

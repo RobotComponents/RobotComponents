@@ -1,7 +1,13 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2023-2025 Arjen Deetman
+//
+// Authors:
+//   - Arjen Deetman (2023-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // Grasshopper Libs
 using Grasshopper.Kernel.Types;
@@ -10,7 +16,6 @@ using GH_IO.Serialization;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Actions.Declarations;
-using RobotComponents.Utils;
 
 namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
 {
@@ -310,7 +315,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
         {
             if (this.Value != null)
             {
-                byte[] array = Serialization.ObjectToByteArray(this.Value);
+                byte[] array = RobotComponents.Utils.Serialization.ObjectToByteArray(this.Value);
                 writer.SetByteArray(IoKey, array);
             }
 
@@ -331,7 +336,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
             }
 
             byte[] array = reader.GetByteArray(IoKey);
-            this.Value = (ConfigurationData)Serialization.ByteArrayToObject(array);
+            this.Value = (ConfigurationData)RobotComponents.Utils.Serialization.ByteArrayToObject(array);
 
             return true;
         }

@@ -1,7 +1,16 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2018-2020 EDEK Uni Kassel
+// Copyright (c) 2020-2025 Arjen Deetman
+//
+// Authors:
+//   - Gabriel Rumph (2018-2020)
+//   - Benedikt Wannemacher (2018-2020)
+//   - Arjen Deetman (2019-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System.Collections.Generic;
@@ -15,7 +24,6 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Actions.Instructions;
-using RobotComponents.Utils;
 
 namespace RobotComponents.ABB.Gh.Goos.Actions
 {
@@ -332,7 +340,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions
         {
             if (this.Value != null)
             {
-                byte[] array = Serialization.ObjectToByteArray(this.Value);
+                byte[] array = RobotComponents.Utils.Serialization.ObjectToByteArray(this.Value);
                 writer.SetByteArray(IoKey, array);
             }
 
@@ -353,7 +361,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions
             }
 
             byte[] array = reader.GetByteArray(IoKey);
-            this.Value = (IAction)Serialization.ByteArrayToObject(array);
+            this.Value = (IAction)RobotComponents.Utils.Serialization.ByteArrayToObject(array);
 
             return true;
         }

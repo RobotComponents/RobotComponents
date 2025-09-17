@@ -1,7 +1,14 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2020 EDEK Uni Kassel
+// Copyright (c) 2020-2025 Arjen Deetman
+//
+// Authors:
+//   - Arjen Deetman (2020-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System;
@@ -141,7 +148,7 @@ namespace RobotComponents.ABB.Gh.Utils
             #region Utilities
             { typeof(FlipPlaneXComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Flip%20Plane%20X/" },
             { typeof(FlipPlaneYComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Flip%20Plane%20Y/" },
-            { typeof(GetObjectManager), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO
+            { typeof(GetObjectManagerComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO
             { typeof(CheckVariableNamesComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO
             { typeof(PlaneToQuaternionComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Plane%20to%20Quarternion/" },
             { typeof(PlaneVisualizerComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Plane%20Visualizer/" },

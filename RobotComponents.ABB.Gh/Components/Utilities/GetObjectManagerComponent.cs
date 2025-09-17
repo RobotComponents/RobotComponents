@@ -1,7 +1,14 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2020 EDEK Uni Kassel
+// Copyright (c) 2020-2025 Arjen Deetman
+//
+// Authors:
+//   - Arjen Deetman (2020-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System;
@@ -15,12 +22,12 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
     /// <summary>
     /// RobotComponents Get Object Manager component.
     /// </summary>
-    public class GetObjectManager : GH_RobotComponent
+    public class GetObjectManagerComponent : GH_RobotComponent
     {
         /// <summary>
         /// Initializes a new instance of the GetObjectManager class.
         /// </summary>
-        public GetObjectManager(): base("Get Object Manager", "Get Object Manager", "Utility",
+        public GetObjectManagerComponent(): base("Get Object Manager", "Get Object Manager", "Utility",
               "Gets the Robot Components object manager of this Grasshopper document.")
         {
         }

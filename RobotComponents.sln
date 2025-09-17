@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RobotComponents.ABB.Gh", "R
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RobotComponents.ABB.Gh2", "RobotComponents.ABB.Gh2\RobotComponents.ABB.Gh2.csproj", "{BB30870D-677C-4DFF-B0C4-4B5B47E207A1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotComponents.Tests", "RobotComponents.Tests\RobotComponents.Tests.csproj", "{C1753653-E078-337D-2EB5-56F54094CBAF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{BB30870D-677C-4DFF-B0C4-4B5B47E207A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB30870D-677C-4DFF-B0C4-4B5B47E207A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB30870D-677C-4DFF-B0C4-4B5B47E207A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1753653-E078-337D-2EB5-56F54094CBAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1753653-E078-337D-2EB5-56F54094CBAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1753653-E078-337D-2EB5-56F54094CBAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1753653-E078-337D-2EB5-56F54094CBAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,36 @@
+name: CI - Build & Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up NuGet (restore)
+        run: nuget restore
+
+      - name: Setup MSBuild tools (optional)
+        # windows-latest already has Visual Studio + developer packs installed
+        run: echo "Using windows-latest with Visual Studio preinstalled"
+
+      - name: Build solution
+        run: msbuild /t:Restore,Build /p:Configuration=Release
+
+      - name: Run tests (produce TRX)
+        working-directory: ./   # change if needed
+        run: |
+          dotnet test --no-build --configuration Release --logger "trx;LogFileName=TestResults.trx"
+
+      - name: Upload test results artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: '**/TestResults.trx'

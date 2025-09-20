@@ -178,7 +178,7 @@ namespace RobotComponents.ABB.Definitions
         /// </returns>
         public override string ToString()
         {
-            return IsValid ? "Robot Kinematics Parameters" : "Invalid Robot Kinematics Parameters";
+            return IsValid ? "Robot Kinematic Parameters" : "Invalid Robot Kinematic Parameters";
         }
 
         /// <summary>

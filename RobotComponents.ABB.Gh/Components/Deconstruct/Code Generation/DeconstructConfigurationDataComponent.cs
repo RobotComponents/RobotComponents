@@ -69,7 +69,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
                 // Check if the object is valid
                 if (!configurationData.IsValid)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Configuration Data is not valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Configuration Data is invalid");
                 }
 
                 // Output

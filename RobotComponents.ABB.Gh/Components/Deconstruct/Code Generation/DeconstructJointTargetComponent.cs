@@ -70,7 +70,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
                 // Check if the object is valid
                 if (!jointTarget.IsValid)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Joint Target is not valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Joint Target is invalid");
                 }
 
                 // Output

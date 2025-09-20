@@ -75,7 +75,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
                 // Check if the input is valid
                 if (!param.IsValid)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Kinematic Parameters instnace is not valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Kinematic Parameters instnace is invalid");
                 }
 
                 // Output

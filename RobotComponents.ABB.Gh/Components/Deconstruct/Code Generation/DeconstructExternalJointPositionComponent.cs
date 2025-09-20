@@ -72,7 +72,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
                 // Check if the object is valid
                 if (!extJointPosition.IsValid)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Joint Position is not valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Joint Position is invalid");
                 }
 
                 // Output

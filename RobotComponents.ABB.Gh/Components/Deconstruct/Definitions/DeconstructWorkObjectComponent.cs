@@ -70,7 +70,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
                 // Check if the object is valid
                 if (!workObject.IsValid)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Work Object is not valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Work Object is invalid");
                 }
 
                 // Output

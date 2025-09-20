@@ -82,7 +82,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             // Check if the object is valid
             if (!externalLinearAxis.IsValid)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Linear Axis is not valid");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Linear Axis is invalid");
             }
 
             // Output

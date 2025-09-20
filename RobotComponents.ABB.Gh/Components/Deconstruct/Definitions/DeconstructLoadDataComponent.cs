@@ -71,7 +71,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
                 // Check if the object is valid
                 if (!loadData.IsValid)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Load Data is not valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Load Data is invalid");
                 }
 
                 // Output

@@ -73,7 +73,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
                 // Check if the object is valid
                 if (!zoneData.IsValid)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Zone Data is not valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Zone Data is invalid");
                 }
 
                 // Output

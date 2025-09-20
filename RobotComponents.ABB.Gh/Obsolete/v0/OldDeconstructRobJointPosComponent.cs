@@ -82,7 +82,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             // Check if the object is valid
             if (!robJointPosition.IsValid)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Joint Position is not valid");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Joint Position is invalid");
             }
 
             // Output

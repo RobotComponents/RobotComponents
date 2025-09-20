@@ -81,7 +81,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             // Check if the object is valid
             if (!externalRotationalAxis.IsValid)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Rotational Axis is not valid");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Rotational Axis is invalid");
             }
 
             // Output

@@ -72,7 +72,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
                 // Check if the object is valid
                 if (!robotTool.IsValid)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Tool is not valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Tool is invalid");
                 }
 
                 // Output

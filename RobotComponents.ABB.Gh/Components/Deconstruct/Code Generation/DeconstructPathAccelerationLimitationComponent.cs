@@ -68,7 +68,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
                 // Check if the object is valid
                 if (!pathAccelerationLimitation.IsValid)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Path Acceleration Limitation is not valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Path Acceleration Limitation is invalid");
                 }
 
                 // Output

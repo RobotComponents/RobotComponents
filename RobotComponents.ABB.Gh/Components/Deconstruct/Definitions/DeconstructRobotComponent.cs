@@ -26,7 +26,7 @@ using RobotComponents.ABB.Gh.Parameters.Definitions;
 namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
 {
     /// <summary>
-    /// RobotComponents Deconstruct Robot Info component.
+    /// RobotComponents Deconstruct Robot component.
     /// </summary>
     public class DeconstructRobotComponent : GH_RobotComponent
     {
@@ -36,7 +36,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the DeconstructrobotComponent class.
+        /// Initializes a new instance of the DeconstructRobotComponent class.
         /// </summary>
         public DeconstructRobotComponent() : base("Deconstruct Robot", "DeRob", "Deconstruct",
               "Deconstructs a Robot component into its parameters.")
@@ -58,10 +58,9 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
         {
             pManager.AddTextParameter("Name", "N", "Robot Name as String", GH_ParamAccess.item);
             pManager.AddMeshParameter("Meshes", "M", "Robot Meshes as Mesh List", GH_ParamAccess.list);
-            pManager.AddPlaneParameter("Axis Planes", "AP", "Axis Planes as Plane List", GH_ParamAccess.list);
+            pManager.RegisterParam(new Param_RobotKinematicParameters(), "Kinematic Parameters", "KP", "Robot Kinematic Parameter", GH_ParamAccess.item);
             pManager.AddIntervalParameter("Axis Limits", "AL", "Axis Limits as Interval List", GH_ParamAccess.list);
             pManager.AddPlaneParameter("Position Plane", "PP", "Position Plane of the Robot as Plane", GH_ParamAccess.item);
-            pManager.AddPlaneParameter("Mounting Frame", "MF", "Mounting Frame as Frame", GH_ParamAccess.item);
             pManager.RegisterParam(new Param_RobotTool(), "Robot Tool", "RT", "Robot Tool as Robot Tool", GH_ParamAccess.item);
             pManager.RegisterParam(new Param_ExternalAxis(), "External Axes", "EA", "External Axes as External Axis Parameter", GH_ParamAccess.list);
         }
@@ -92,7 +91,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
                 // Check if the input is valid
                 if (!robot.IsValid)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot is not valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot is invalid");
                 }
 
                 // Output meshes (only link meshes, no robot tool)
@@ -114,7 +113,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
                 }
                 else
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Tool is not Valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Tool is invalid");
                 }
 
                 for (int i = 0; i < robot.ExternalAxes.Count; i++)
@@ -126,19 +125,18 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
                     }
                     else
                     {
-                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Axis is not Valid");
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Axis is invalid");
                     }
                 }
 
                 // Output
                 DA.SetData(0, robot.Name);
                 DA.SetDataList(1, meshes);
-                DA.SetDataList(2, robot.InternalAxisPlanes);
+                DA.SetData(2, robot.RobotKinematicParameters);
                 DA.SetDataList(3, robot.InternalAxisLimits);
                 DA.SetData(4, robot.BasePlane);
-                DA.SetData(5, robot.MountingFrame);
-                DA.SetData(6, robot.Tool);
-                DA.SetDataList(7, robot.ExternalAxes);
+                DA.SetData(5, robot.Tool);
+                DA.SetDataList(6, robot.ExternalAxes);
             }
         }
 
@@ -173,7 +171,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("E651BA0F-7CE3-40BC-A04F-C76EA0665D1A"); }
+            get { return new Guid("149A3904-0897-4E41-A133-6FB37DFC7B99"); }
         }
         #endregion
 

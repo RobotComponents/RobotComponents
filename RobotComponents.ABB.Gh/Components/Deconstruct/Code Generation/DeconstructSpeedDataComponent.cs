@@ -72,7 +72,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
                 // Check if the object is valid
                 if (!speedData.IsValid)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Speed Data is not valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Speed Data is invalid");
                 }
 
                 // Output

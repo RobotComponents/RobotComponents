@@ -67,7 +67,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
                 // Is Valid?
                 if (!target.IsValid)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Target is not valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Target is invalid");
                 }
 
                 // Output

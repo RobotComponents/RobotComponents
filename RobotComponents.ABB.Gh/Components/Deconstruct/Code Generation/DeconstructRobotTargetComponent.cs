@@ -71,7 +71,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
                 // Is Valid?
                 if (!target.IsValid)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Target is not valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Target is invalid");
                 }
 
                 // Output

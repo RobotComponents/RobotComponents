@@ -72,7 +72,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
                 // Check if the object is valid
                 if (!movement.IsValid)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Movement is not valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Movement is invalid");
                 }
 
                 // Output

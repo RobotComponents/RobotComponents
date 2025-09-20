@@ -76,7 +76,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
                 // Check if the input is valid
                 if (!robot.IsValid)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot is not valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot is invalid");
                 }
 
                 // Output

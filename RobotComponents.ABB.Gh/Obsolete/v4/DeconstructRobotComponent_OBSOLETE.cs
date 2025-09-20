@@ -94,7 +94,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
                 // Check if the input is valid
                 if (!robot.IsValid)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot is not valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot is invalid");
                 }
 
                 // Output meshes (only link meshes, no robot tool)
@@ -116,7 +116,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
                 }
                 else
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Tool is not Valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Tool is invalid");
                 }
 
                 for (int i = 0; i < robot.ExternalAxes.Count; i++)
@@ -128,7 +128,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
                     }
                     else
                     {
-                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Axis is not Valid");
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Axis is invalid");
                     }
                 }
 

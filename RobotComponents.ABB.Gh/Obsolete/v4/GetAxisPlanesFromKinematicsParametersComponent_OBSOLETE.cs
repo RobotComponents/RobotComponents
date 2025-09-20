@@ -11,27 +11,28 @@
 
 // System Libs
 using System;
-// Grasshopper Libs
-using Grasshopper.Kernel;
 // Rhino Libs
 using Rhino.Geometry;
+// Grasshopper Libs
+using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
-using RobotComponents.ABB.Gh.Parameters.Definitions;
+using RobotComponents.ABB.Gh.Components;
 
-namespace RobotComponents.ABB.Gh.Components.Definitions
+namespace RobotComponents.ABB.Gh.Obsolete
 {
     /// <summary>
     /// RobotComponents Get Axis Planes from Kinematics Parameters component.
     /// </summary>
-    public class GetAxisPlanesFromKinematicsParametersComponent : GH_RobotComponent
+    [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
+    public class GetAxisPlanesFromKinematicsParametersComponent_OBSOLETE : GH_RobotComponent
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public GetAxisPlanesFromKinematicsParametersComponent() : base("Get Axis Planes from Robot Kinematics Parameters", "KiPa2AxPl", "Definitions",
+        public GetAxisPlanesFromKinematicsParametersComponent_OBSOLETE() : base("Get Axis Planes from Kinematics Parameters", "KiPa2AxPl", "Definitions",
               "Gets the robot axis planes from the given robot kinematics parameters.")
         {
         }
@@ -41,8 +42,15 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddPlaneParameter("Position Plane", "PP", "Position Plane of the Robot as Plane", GH_ParamAccess.item, Plane.WorldXY);
-            pManager.AddParameter(new Param_RobotKinematicParameters(), "Kinematic Parameters", "KP", "Robot Kinematic Parameters", GH_ParamAccess.item);
+            pManager.AddPlaneParameter("Position Plane", "P", "Position Plane of the Robot as Plane", GH_ParamAccess.item, Plane.WorldXY);
+            pManager.AddNumberParameter("A1", "A1", "The shoulder offset as a Number.", GH_ParamAccess.item);
+            pManager.AddNumberParameter("A2", "A2", "The elbow offset as a Number.", GH_ParamAccess.item);
+            pManager.AddNumberParameter("A3", "A3", "The wrist offset as a Number.", GH_ParamAccess.item);
+            pManager.AddNumberParameter("B", "B", "The lateral offset as a Number.", GH_ParamAccess.item);
+            pManager.AddNumberParameter("C1", "C1", "The first link length as a Number.", GH_ParamAccess.item);
+            pManager.AddNumberParameter("C2", "C2", "The second link length as a Number.", GH_ParamAccess.item);
+            pManager.AddNumberParameter("C3", "C3", "The third link length as a Number.", GH_ParamAccess.item);
+            pManager.AddNumberParameter("C4", "C4", "The fourth link length as a Number.", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -62,13 +70,28 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         {
             // Input variables
             Plane plane = Plane.WorldXY;
-            RobotKinematicParameters param = new RobotKinematicParameters();
+            double a1 = 0;
+            double a2 = 0;
+            double a3 = 0;
+            double b = 0;
+            double c1 = 0;
+            double c2 = 0;
+            double c3 = 0;
+            double c4 = 0;
 
             // Catch the input data
             if (!DA.GetData(0, ref plane)) { return; }
-            if (!DA.GetData(1, ref param)) { return; }
+            if (!DA.GetData(1, ref a1)) { return; }
+            if (!DA.GetData(2, ref a2)) { return; }
+            if (!DA.GetData(3, ref a3)) { return; }
+            if (!DA.GetData(4, ref b)) { return; }
+            if (!DA.GetData(5, ref c1)) { return; }
+            if (!DA.GetData(6, ref c2)) { return; }
+            if (!DA.GetData(7, ref c3)) { return; }
+            if (!DA.GetData(8, ref c4)) { return; }
 
             // Axis Planes
+            RobotKinematicParameters param = new RobotKinematicParameters(a1, a2, a3, b, c1, c2, c3, c4);
             Plane[] axisPlanes = param.GetAxisPlanes(plane, out Plane mountingFrame);
 
             // Output
@@ -83,7 +106,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.senary; }
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -91,7 +114,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         public override bool Obsolete
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>
@@ -107,7 +130,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("B35CC990-6885-4D62-BA18-C73200E901D4"); }
+            get { return new Guid("AA7A04CC-FFE2-487A-95D3-AF12E62D5BDB"); }
         }
         #endregion
     }

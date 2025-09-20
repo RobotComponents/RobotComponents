@@ -118,6 +118,7 @@ namespace RobotComponents.ABB.Gh.Utils
             { typeof(DeconstructRobotToolComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Deconstruct/Definitions/Deconstruct%20Robot%20Tool/" },
             { typeof(DeconstructWorkObjectComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Deconstruct/Definitions/Deconstruct%20Work%20Object/" },
             { typeof(DeconstructLoadDataComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Deconstruct/Definitions/" },
+            { typeof(DeconstructRobotKinematicParametersComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/" }, // TODO
             #endregion
 
             #region Definitions
@@ -128,7 +129,7 @@ namespace RobotComponents.ABB.Gh.Utils
             { typeof(RobotToolComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Tool/" },
             { typeof(WorkObjectComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Work%20Object/" },
             { typeof(LoadDataComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/" }, // TODO
-            { typeof(GetKinematicsParametersComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/" }, // TODO
+            { typeof(RobotKinematicParametersComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/" }, // TODO
             { typeof(GetAxisPlanesFromKinematicsParametersComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/" }, // TODO
             #endregion
 

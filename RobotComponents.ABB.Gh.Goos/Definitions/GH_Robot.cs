@@ -188,10 +188,26 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
             }
 
             //Cast to Robot Tool
-            if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTool)))
+            if (typeof(Q).IsAssignableFrom(typeof(RobotTool)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value.Tool; }
+                return true;
+            }
+
+            //Cast to Robot Kinematic Parameters Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_RobotKinematicParameters)))
+            {
+                if (Value == null) { target = (Q)(object)new GH_RobotKinematicParameters(); }
+                else { target = (Q)(object)new GH_RobotKinematicParameters(Value.RobotKinematicParameters); }
+                return true;
+            }
+
+            //Cast to Robot Kinematic Parameters
+            if (typeof(Q).IsAssignableFrom(typeof(RobotKinematicParameters)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value.RobotKinematicParameters; }
                 return true;
             }
 

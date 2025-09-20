@@ -12,7 +12,6 @@
 // System Libs
 using System;
 using System.Collections.Generic;
-using System.Linq;
 // Rhino Libs
 using Rhino.Geometry;
 // Robot Components Libs
@@ -38,49 +37,8 @@ namespace RobotComponents.ABB.Presets
         /// <returns> The predefined robot instance. </returns>
         public static Robot GetRobotPreset(RobotPreset preset, Plane positionPlane, RobotTool tool = null, IList<IExternalAxis> externalAxes = null)
         {
-            // Get the preset data
             RobotPresetData data = GetRobotPresetData(preset);
-
-            // Substract the data
-            List<Plane> axisPlanes = GetAxisPlanes(data.KinematicParameters, out Plane mountingFrame);
-            List<Mesh> meshes = data.MeshResources.Select(
-                r => Mesh.FromJSON(Properties.Resources.ResourceManager.GetObject(r) as string) as Mesh).ToList();
-
-            // Apply defaults if null
-            tool = tool ?? new RobotTool();
-            externalAxes = externalAxes ?? new List<IExternalAxis>();
-
-            // Override the position plane when an external axis is coupled that moves the robot
-            positionPlane = externalAxes.FirstOrDefault(axis => axis.MovesRobot)?.AttachmentPlane ?? positionPlane;
-
-            // Create the robot preset
-            Robot robot = new Robot(data.Name, meshes, axisPlanes, data.AxisLimits, Plane.WorldXY, mountingFrame, tool, externalAxes);
-
-            // Transform the robot to the defined position plane
-            robot.Transform(Transform.PlaneToPlane(Plane.WorldXY, positionPlane));
-
-            return robot;
-        }
-
-        /// <summary>
-        /// Returns the list with the axis planes of the robot in robot coordinate space.
-        /// </summary>
-        /// <param name="kinematicParameters"> The kinematics parameters as an array </param>
-        /// <param name="mountingFrame"> The tool mounting frame. </param>
-        /// <returns> The internal axis planes of the robot. </returns>
-        private static List<Plane> GetAxisPlanes(double[] kinematicParameters, out Plane mountingFrame)
-        {
-            return Robot.GetAxisPlanesFromKinematicsParameters(
-                Plane.WorldXY,
-                kinematicParameters[0],
-                kinematicParameters[1],
-                kinematicParameters[2],
-                kinematicParameters[3],
-                kinematicParameters[4],
-                kinematicParameters[5],
-                kinematicParameters[6],
-                kinematicParameters[7],
-                out mountingFrame).ToList();
+            return data.GetRobot(positionPlane, tool, externalAxes);
         }
 
         /// <summary>

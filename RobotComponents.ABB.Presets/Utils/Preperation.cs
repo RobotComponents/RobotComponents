@@ -10,6 +10,10 @@
 // For license details, see the LICENSE file in the project root.
 
 // System Libs
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 // Eto Libs
 using Eto.Forms;
 // Rhino Libs
@@ -20,10 +24,6 @@ using Rhino.Geometry;
 // Robot Components Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Presets.Enumerations;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using static RobotComponents.ABB.Presets.Utils.HelperMethods;
 using static RobotComponents.Utils.MeshPreperation;
 
@@ -551,6 +551,8 @@ namespace RobotComponents.ABB.Presets.Utils
                 "using System.Collections.Generic;",
                 "// Rhino Libs",
                 "using Rhino.Geometry;",
+                "// Robot Components Libs",
+                "using RobotComponents.ABB.Definitions;",
                 "",
                 "namespace RobotComponents.ABB.Presets.Robots",
                 "{",
@@ -571,7 +573,7 @@ namespace RobotComponents.ABB.Presets.Utils
                 "        /// <summary>",
                 "        /// Gets the kinematics parameters.",
                 "        /// </summary>",
-               $"        public override double[] KinematicParameters => new double[] {{ {robot.A1}, {robot.A2}, {robot.A3}, {robot.B}, {robot.C1}, {robot.C2}, {robot.C3}, {robot.C4} }};",
+               $"        public override RobotKinematicParameters RobotKinematicParameters => new RobotKinematicParameters({robot.RobotKinematicParameters.A1}, {robot.RobotKinematicParameters.A2}, {robot.RobotKinematicParameters.A3}, {robot.RobotKinematicParameters.B}, {robot.RobotKinematicParameters.C1}, {robot.RobotKinematicParameters.C2}, {robot.RobotKinematicParameters.C3}, {robot.RobotKinematicParameters.C4});",
 
                 "",
                 "        /// <summary>",

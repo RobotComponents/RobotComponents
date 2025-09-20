@@ -403,6 +403,16 @@ namespace RobotComponents.ABB.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap DeconstructRobotKinematicParameters_Icon {
+            get {
+                object obj = ResourceManager.GetObject("DeconstructRobotKinematicParameters_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap DeconstructRobotTool_Icon {
             get {
                 object obj = ResourceManager.GetObject("DeconstructRobotTool_Icon", resourceCulture);
@@ -1316,6 +1326,26 @@ namespace RobotComponents.ABB.Gh.Properties {
         internal static System.Drawing.Bitmap RobotJointPosition_Parameter_Icon {
             get {
                 object obj = ResourceManager.GetObject("RobotJointPosition_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap RobotKinematicParameters_Icon {
+            get {
+                object obj = ResourceManager.GetObject("RobotKinematicParameters_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap RobotKinematicParameters_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("RobotKinematicParameters_Parameter_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

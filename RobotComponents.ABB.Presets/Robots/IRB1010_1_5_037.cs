@@ -13,6 +13,8 @@
 using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
+// Robot Components Libs
+using RobotComponents.ABB.Definitions;
 
 namespace RobotComponents.ABB.Presets.Robots
 {
@@ -33,7 +35,7 @@ namespace RobotComponents.ABB.Presets.Robots
         /// <summary>
         /// Gets the kinematics parameters.
         /// </summary>
-        public override double[] KinematicParameters => new double[] { 0, -0, -0, 0, 190, 185, 185, 45 };
+        public override RobotKinematicParameters RobotKinematicParameters => new RobotKinematicParameters(0, -0, -0, 0, 190, 185, 185, 45);
 
         /// <summary>
         /// Gets the axis limits.

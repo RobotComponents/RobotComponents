@@ -148,24 +148,24 @@ namespace RobotComponents.ABB.Kinematics
         {
             _opw.Signs = _signs;
             _opw.Offsets = _offsets;
-            _opw.A1 = _robot.A1;
-            _opw.A2 = _robot.A2;
-            _opw.B = _robot.B;
-            _opw.C1 = _robot.C1;
-            _opw.C2 = _robot.C2;
-            _opw.C3 = _robot.C3;
-            _opw.C4 = _robot.C4;
+            _opw.A1 = _robot.RobotKinematicParameters.A1;
+            _opw.A2 = _robot.RobotKinematicParameters.A2;
+            _opw.B = _robot.RobotKinematicParameters.B;
+            _opw.C1 = _robot.RobotKinematicParameters.C1;
+            _opw.C2 = _robot.RobotKinematicParameters.C2;
+            _opw.C3 = _robot.RobotKinematicParameters.C3;
+            _opw.C4 = _robot.RobotKinematicParameters.C4;
 
             _wok.Signs = _signs;
             _wok.Offsets = _offsets;
-            _wok.A1 = _robot.A1;
-            _wok.A2 = _robot.A2;
-            //_wok.A3 = _robot.A3;
-            _wok.B = _robot.B;
-            _wok.C1 = _robot.C1;
-            _wok.C2 = _robot.C2;
-            _wok.C3 = _robot.C3;
-            _wok.C4 = _robot.C4;
+            _wok.A1 = _robot.RobotKinematicParameters.A1;
+            _wok.A2 = _robot.RobotKinematicParameters.A2;
+            //_wok.A3 = _robot.RobotKinematicParameters.A3;
+            _wok.B = _robot.RobotKinematicParameters.B;
+            _wok.C1 = _robot.RobotKinematicParameters.C1;
+            _wok.C2 = _robot.RobotKinematicParameters.C2;
+            _wok.C3 = _robot.RobotKinematicParameters.C3;
+            _wok.C4 = _robot.RobotKinematicParameters.C4;
         }
 
         /// <summary>
@@ -224,7 +224,7 @@ namespace RobotComponents.ABB.Kinematics
             if (_movement.Target is RobotTarget robotTarget)
             {
                 // OPW kinematics solver
-                if (_robot.A3 == 0)
+                if (_robot.RobotKinematicParameters.A3 == 0)
                 {
                     // Calculate inverse kinematics
                     _opw.Inverse(_localEndPlane);

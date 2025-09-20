@@ -3,12 +3,12 @@
 // Project: https://github.com/RobotComponents/RobotComponents
 //
 // Copyright (c) 2018-2020 EDEK Uni Kassel
-// Copyright (c) 2020-2024 Arjen Deetman
+// Copyright (c) 2020-2025 Arjen Deetman
 //
 // Authors:
 //   - Gabriel Rumph (2018-2020)
 //   - Benedikt Wannemacher (2018-2020)
-//   - Arjen Deetman (2019-2024)
+//   - Arjen Deetman (2019-2025)
 //
 // For license details, see the LICENSE file in the project root.
 
@@ -35,8 +35,8 @@ namespace RobotComponents.ABB.Definitions
         #region fields
         private string _name; // The name of the robot
         private readonly List<Mesh> _meshes; // The robot mesh
-        private List<Plane> _internalAxisPlanes; // The internal axis planes
-        private List<Interval> _internalAxisLimits; // The internal axis limits
+        private Plane[] _internalAxisPlanes; // The internal axis planes
+        private Interval[] _internalAxisLimits; // The internal axis limits
         private Plane _basePlane; // The base plane (position) of the robot
         private Plane _mountingFrame; // The tool mounting frame
         private RobotTool _tool; // The attached robot tool
@@ -46,19 +46,7 @@ namespace RobotComponents.ABB.Definitions
         private readonly ForwardKinematics _forwardKinematics; // Robot forward kinematics
         private List<Plane> _externalAxisPlanes; // The external axis planes
         private List<Interval> _externalAxisLimits; // The external axis limit
-
-        // Kinematics properties
-        private double _upperArmLength;
-        private double _lowerArmLength;
-        private double _elbowLength;
-        private double _a1;
-        private double _a2;
-        private double _a3;
-        private double _b;
-        private double _c1;
-        private double _c2;
-        private double _c3;
-        private double _c4;
+        private RobotKinematicParameters _robotKinematicParameters; // Kinematics parameters
         #endregion
 
         #region (de)serialization
@@ -71,8 +59,8 @@ namespace RobotComponents.ABB.Definitions
         {
             _name = (string)info.GetValue("Name", typeof(string));
             _meshes = (List<Mesh>)info.GetValue("Meshes", typeof(List<Mesh>));
-            _internalAxisPlanes = (List<Plane>)info.GetValue("Internal Axis Planes", typeof(List<Plane>));
-            _internalAxisLimits = (List<Interval>)info.GetValue("Internal Axis Limits", typeof(List<Interval>));
+            _internalAxisPlanes = (Plane[])info.GetValue("Internal Axis Planes", typeof(Plane[]));
+            _internalAxisLimits = (Interval[])info.GetValue("Internal Axis Limits", typeof(Interval[]));
             _basePlane = (Plane)info.GetValue("Base Plane", typeof(Plane));
             _mountingFrame = (Plane)info.GetValue("Mounting Frame", typeof(Plane));
             _tool = (RobotTool)info.GetValue("RobotTool", typeof(RobotTool));
@@ -80,11 +68,10 @@ namespace RobotComponents.ABB.Definitions
             _externalAxes = (List<IExternalAxis>)info.GetValue("External Axis", typeof(List<IExternalAxis>));
             _externalAxisPlanes = (List<Plane>)info.GetValue("External Axis Planes", typeof(List<Plane>));
             _externalAxisLimits = (List<Interval>)info.GetValue("External Axis Limits", typeof(List<Interval>));
+            _robotKinematicParameters = (RobotKinematicParameters)info.GetValue("Robot Kinematic Parameters", typeof(RobotKinematicParameters));
 
             _inverseKinematics = new InverseKinematics(this);
             _forwardKinematics = new ForwardKinematics(this);
-
-            UpdateKinematicsParameters();
         }
 
         /// <summary>
@@ -99,8 +86,8 @@ namespace RobotComponents.ABB.Definitions
             info.AddValue("Version", VersionNumbering.Version, typeof(Version));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Meshes", _meshes, typeof(List<Mesh>));
-            info.AddValue("Internal Axis Planes", _internalAxisPlanes, typeof(List<Plane>));
-            info.AddValue("Internal Axis Limits", _internalAxisLimits, typeof(List<Interval>));
+            info.AddValue("Internal Axis Planes", _internalAxisPlanes, typeof(Plane[]));
+            info.AddValue("Internal Axis Limits", _internalAxisLimits, typeof(Interval[]));
             info.AddValue("Base Plane", _basePlane, typeof(Plane));
             info.AddValue("Mounting Frame", _mountingFrame, typeof(Plane));
             info.AddValue("RobotTool", _tool, typeof(RobotTool));
@@ -108,6 +95,7 @@ namespace RobotComponents.ABB.Definitions
             info.AddValue("External Axis", _externalAxes, typeof(List<IExternalAxis>));
             info.AddValue("External Axis Planes", _externalAxisPlanes, typeof(List<Plane>));
             info.AddValue("External Axis Limits", _externalAxisLimits, typeof(List<Interval>));
+            info.AddValue("Robot Kinematic Parameters", _robotKinematicParameters, typeof(RobotKinematicParameters));
         }
         #endregion
 
@@ -121,65 +109,26 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// Initializes a new instance of the Robot class without attached external axes.
+        /// Initializes a new instance of the Robot class.
         /// </summary>
         /// <param name="name"> The name. </param>
         /// <param name="meshes"> The base and links meshes defined in the world coorindate space. </param>
-        /// <param name="internalAxisPlanes"> The internal axes planes defined in the world coorindate space. </param>
+        /// <param name="robotKinematicParameters"> The robot kinematic parameters. </param>
         /// <param name="internalAxisLimits"> The internal axes limit. </param>
         /// <param name="basePlane"> The position and orientation of the robot base in the world coordinate space. </param>
-        /// <param name="mountingFrame"> The tool mounting frame definied in the world coordinate space. </param>
-        /// <param name="tool"> The Robot Tool. </param>
-        public Robot(string name, IList<Mesh> meshes, IList<Plane> internalAxisPlanes, IList<Interval> internalAxisLimits, Plane basePlane, Plane mountingFrame, RobotTool tool)
-        {
-            // Update robot related fields
-            _name = name;
-            _meshes = new List<Mesh>(meshes);
-            _internalAxisPlanes = new List<Plane>(internalAxisPlanes);
-            _internalAxisLimits = new List<Interval>(internalAxisLimits);
-            _basePlane = basePlane;
-            _mountingFrame = mountingFrame;
-
-            // Update tool related fields
-            _tool = tool.Duplicate(); // Make a deep copy since we transform it later
-            _meshes.Add(GetAttachedToolMesh());
-            CalculateAttachedToolPlane();
-
-            // Update external axis related fields
-            _externalAxes = new List<IExternalAxis>();
-            _externalAxisPlanes = Enumerable.Repeat(Plane.Unset, 6).ToList();
-            _externalAxisLimits = Enumerable.Repeat(new Interval(), 6).ToList();
-
-            // Transform Robot Tool to Mounting Frame
-            Transform trans = Rhino.Geometry.Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
-            _tool.Transform(trans);
-
-            // Set kinematics
-            _inverseKinematics = new InverseKinematics(this);
-            _forwardKinematics = new ForwardKinematics(this);
-            UpdateKinematicsParameters();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Robot class with attached external axes.
-        /// </summary>
-        /// <param name="name"> The name. </param>
-        /// <param name="meshes"> The base and links meshes defined in the world coorindate space. </param>
-        /// <param name="internalAxisPlanes"> The internal axes planes defined in the world coorindate space. </param>
-        /// <param name="internalAxisLimits"> The internal axes limit. </param>
-        /// <param name="basePlane"> The position and orientation of the robot base in the world coordinate space. </param>
-        /// <param name="mountingFrame"> The tool mounting frame definied in the world coordinate space. </param>
         /// <param name="tool"> The Robot Tool. </param>
         /// <param name="externalAxes"> The attached external axes. </param>
-        public Robot(string name, IList<Mesh> meshes, IList<Plane> internalAxisPlanes, IList<Interval> internalAxisLimits, Plane basePlane, Plane mountingFrame, RobotTool tool, IList<IExternalAxis> externalAxes)
+        public Robot(string name, IList<Mesh> meshes, RobotKinematicParameters robotKinematicParameters, IList<Interval> internalAxisLimits, Plane basePlane, RobotTool tool, IList<IExternalAxis> externalAxes = null)
         {
             // Robot related fields
             _name = name;
             _meshes = new List<Mesh>(meshes);
-            _internalAxisPlanes = new List<Plane>(internalAxisPlanes);
-            _internalAxisLimits = new List<Interval>(internalAxisLimits);
-            _basePlane = basePlane;
-            _mountingFrame = mountingFrame;
+            _robotKinematicParameters = new RobotKinematicParameters(robotKinematicParameters);
+            _internalAxisLimits = new List<Interval>(internalAxisLimits).ToArray();
+            _basePlane = new Plane(basePlane);
+
+            // Calculate axis planes and tool mounting frame
+            _internalAxisPlanes = _robotKinematicParameters.GetAxisPlanes(basePlane, out _mountingFrame);
 
             // Tool related fields
             _tool = tool.Duplicate(); // Make a deep copy since we transform it later
@@ -187,6 +136,7 @@ namespace RobotComponents.ABB.Definitions
             CalculateAttachedToolPlane();
 
             // External axis related fields
+            externalAxes = externalAxes ?? new List<IExternalAxis>();
             _externalAxes = new List<IExternalAxis>(externalAxes);
             _externalAxisPlanes = new List<Plane>();
             _externalAxisLimits = new List<Interval>();
@@ -199,7 +149,50 @@ namespace RobotComponents.ABB.Definitions
             // Set kinematics
             _inverseKinematics = new InverseKinematics(this);
             _forwardKinematics = new ForwardKinematics(this);
-            UpdateKinematicsParameters();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Robot class.
+        /// </summary>
+        /// <param name="name"> The name. </param>
+        /// <param name="meshes"> The base and links meshes defined in the world coorindate space. </param>
+        /// <param name="internalAxisPlanes"> The internal axes planes defined in the world coorindate space. </param>
+        /// <param name="internalAxisLimits"> The internal axes limit. </param>
+        /// <param name="basePlane"> The position and orientation of the robot base in the world coordinate space. </param>
+        /// <param name="tool"> The Robot Tool. </param>
+        /// <param name="externalAxes"> The attached external axes. </param>
+        public Robot(string name, IList<Mesh> meshes, IList<Plane> internalAxisPlanes, IList<Interval> internalAxisLimits, Plane basePlane, RobotTool tool, IList<IExternalAxis> externalAxes = null)
+        {
+            // Robot related fields
+            _name = name;
+            _meshes = new List<Mesh>(meshes);
+            _internalAxisPlanes = new List<Plane>(internalAxisPlanes).ToArray();
+            _internalAxisLimits = new List<Interval>(internalAxisLimits).ToArray();
+            _basePlane = new Plane(basePlane);
+
+            // Calculate kinematic parameters
+            _robotKinematicParameters = new RobotKinematicParameters(basePlane, internalAxisPlanes);
+            _robotKinematicParameters.GetAxisPlanes(basePlane, out _mountingFrame);
+
+            // Tool related fields
+            _tool = tool.Duplicate(); // Make a deep copy since we transform it later
+            _meshes.Add(GetAttachedToolMesh());
+            CalculateAttachedToolPlane();
+
+            // External axis related fields
+            externalAxes = externalAxes ?? new List<IExternalAxis>();
+            _externalAxes = new List<IExternalAxis>(externalAxes);
+            _externalAxisPlanes = new List<Plane>();
+            _externalAxisLimits = new List<Interval>();
+            UpdateExternalAxisFields();
+
+            // Transform Robot Tool to Mounting Frame
+            Transform trans = Rhino.Geometry.Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
+            _tool.Transform(trans);
+
+            // Set kinematics
+            _inverseKinematics = new InverseKinematics(this);
+            _forwardKinematics = new ForwardKinematics(this);
         }
 
         /// <summary>
@@ -211,8 +204,9 @@ namespace RobotComponents.ABB.Definitions
         {
             // Robot related fields
             _name = robot.Name;
-            _internalAxisPlanes = robot.InternalAxisPlanes.ConvertAll(item => new Plane(item));
-            _internalAxisLimits = robot.InternalAxisLimits.ConvertAll(item => new Interval(item));
+            _robotKinematicParameters = new RobotKinematicParameters(robot.RobotKinematicParameters);
+            _internalAxisPlanes = new List<Plane>(robot.InternalAxisPlanes).ToArray();
+            _internalAxisLimits = new List<Interval>(robot.InternalAxisLimits).ToArray();
             _basePlane = new Plane(robot.BasePlane);
             _mountingFrame = new Plane(robot.MountingFrame);
 
@@ -240,7 +234,6 @@ namespace RobotComponents.ABB.Definitions
             // Kinematics
             _inverseKinematics = new InverseKinematics(this);
             _forwardKinematics = new ForwardKinematics(this, robot.ForwardKinematics.HideMesh);
-            UpdateKinematicsParameters();
         }
 
         /// <summary>
@@ -277,64 +270,6 @@ namespace RobotComponents.ABB.Definitions
         }
         #endregion
 
-        #region static methods
-        /// <summary>
-        /// Returns the axis planes for the given kinematics parameters in world coordinate space. 
-        /// </summary>
-        /// <param name="basePlane"> The position and orientation of the robot base in the world coordinate space. </param>
-        /// <param name="a1"> Kinematics parameter A1. </param>
-        /// <param name="a2"> Kinematics parameter A2. </param>
-        /// <param name="a3"> Kinematics parameter A3. </param>
-        /// <param name="b"> Kinematics parameter B. </param>
-        /// <param name="c1"> Kinematics parameter C1. </param>
-        /// <param name="c2"> Kinematics parameter C2. </param>
-        /// <param name="c3"> Kinematics parameter C3. </param>
-        /// <param name="c4"> Kinematics parameter C4. </param>
-        /// <param name="mountingFrame"> The tool mounting frame. </param>
-        /// <returns> The axis planes. </returns>
-        public static Plane[] GetAxisPlanesFromKinematicsParameters(Plane basePlane, double a1, double a2, double a3, double b, double c1, double c2, double c3, double c4, out Plane mountingFrame)
-        {
-            Plane[] planes = GetAxisPlanesFromKinematicsParameters(a1, a2, a3, b, c1, c2, c3, c4, out mountingFrame);
-            Transform orient = Rhino.Geometry.Transform.PlaneToPlane(Plane.WorldXY, basePlane);
-
-            for (int i = 0; i < planes.Length; i++)
-            {
-                planes[i].Transform(orient);
-            }
-
-            return planes;
-        }
-
-        /// <summary>
-        /// Returns the axis planes for the given kinematics parameters in local coordinate space. 
-        /// </summary>
-        /// <param name="a1"> Kinematics parameter A1. </param>
-        /// <param name="a2"> Kinematics parameter A2. </param>
-        /// <param name="a3"> Kinematics parameter A3. </param>
-        /// <param name="b"> Kinematics parameter B. </param>
-        /// <param name="c1"> Kinematics parameter C1. </param>
-        /// <param name="c2"> Kinematics parameter C2. </param>
-        /// <param name="c3"> Kinematics parameter C3. </param>
-        /// <param name="c4"> Kinematics parameter C4. </param>
-        /// <param name="mountingFrame"> The tool mounting frame. </param>
-        /// <returns> The axis planes. </returns>
-        public static Plane[] GetAxisPlanesFromKinematicsParameters(double a1, double a2, double a3, double b, double c1, double c2, double c3, double c4, out Plane mountingFrame)
-        {
-            Plane[] planes = new Plane[6];
-
-            planes[0] = new Plane(new Point3d(0, 0, 0), new Vector3d(0, 0, 1));
-            planes[1] = new Plane(new Point3d(a1, 0, c1), new Vector3d(0, 1, 0));
-            planes[2] = new Plane(new Point3d(a1, 0, c1 + c2), new Vector3d(0, 1, 0));
-            planes[3] = new Plane(new Point3d(a1, -b, c1 + c2 - a2), new Vector3d(1, 0, 0));
-            planes[4] = new Plane(new Point3d(a1 + c3, -b, c1 + c2 - a2), new Vector3d(0, 1, 0));
-            planes[5] = new Plane(new Point3d(a1 + c3 + c4, -b, c1 + c2 - a2 - a3), new Vector3d(1, 0, 0));
-
-            mountingFrame = new Plane(new Point3d(planes[5].Origin), -Vector3d.ZAxis, Vector3d.YAxis);
-
-            return planes;
-        }
-        #endregion
-
         #region methods
         /// <summary>
         /// Returns a string that represents the current object.
@@ -344,14 +279,7 @@ namespace RobotComponents.ABB.Definitions
         /// </returns>
         public override string ToString()
         {
-            if (!IsValid)
-            {
-                return "Invalid Robot";
-            }
-            else
-            {
-                return $"Robot ({_name})";
-            }
+            return IsValid ? $"Robot ({_name})" : "Invalid Robot";
         }
 
         /// <summary>
@@ -397,41 +325,6 @@ namespace RobotComponents.ABB.Definitions
             {
                 throw new ArgumentException("Some of the axis logic numbers are used multiple times");
             }
-        }
-
-        /// <summary>
-        /// Reinitializes the fields that are related to the kinematics.
-        /// </summary>
-        private void UpdateKinematicsParameters()
-        {
-            // Get values in World XY plane
-            Transform orient = Rhino.Geometry.Transform.PlaneToPlane(_basePlane, Plane.WorldXY);
-            List<Plane> planes = new List<Plane>();
-
-            for (int i = 0; i < _internalAxisPlanes.Count; i++)
-            {
-                Plane plane = new Plane(_internalAxisPlanes[i]);
-                plane.Transform(orient);
-                planes.Add(plane);
-            }
-
-            // Elbow
-            _lowerArmLength = planes[1].Origin.DistanceTo(planes[2].Origin);
-            _upperArmLength = planes[2].Origin.DistanceTo(planes[4].Origin);
-            _elbowLength = _lowerArmLength + _upperArmLength;
-
-            // OPW Kinematics parameters
-            _a1 = planes[1].Origin.X;
-            _a2 = -(planes[4].Origin.Z - planes[2].Origin.Z);
-            _a3 = -(planes[5].Origin.Z - planes[4].Origin.Z);
-            _b = planes[0].Origin.Y - planes[5].Origin.Y;
-            _c1 = planes[1].Origin.Z;
-            _c2 = planes[2].Origin.Z - planes[1].Origin.Z;
-            _c3 = planes[4].Origin.X - planes[2].Origin.X;
-            _c4 = planes[5].Origin.X - planes[4].Origin.X;
-
-            // Update kinematics solvers
-            _inverseKinematics.ReInitialize();
         }
 
         /// <summary>
@@ -499,7 +392,7 @@ namespace RobotComponents.ABB.Definitions
                 _meshes[i].Transform(xform);
             }
 
-            for (int i = 0; i < _internalAxisPlanes.Count; i++)
+            for (int i = 0; i < _internalAxisPlanes.Length; i++)
             {
                 Plane transformedPlane = new Plane(_internalAxisPlanes[i]);
                 transformedPlane.Transform(xform);
@@ -568,14 +461,17 @@ namespace RobotComponents.ABB.Definitions
         {
             get
             {
+                if (_robotKinematicParameters == null) { return false; }
+                if (_robotKinematicParameters.IsValid == false) { return false; }
                 if (_internalAxisPlanes == null) { return false; }
+                if (_internalAxisPlanes.Length != NumberOfAxes) { return false; }
                 if (_internalAxisLimits == null) { return false; }
+                if (_internalAxisLimits.Length != NumberOfAxes) { return false; }
                 if (_basePlane == null) { return false; }
                 if (_basePlane == Plane.Unset) { return false; }
                 if (_mountingFrame == null) { return false; }
                 if (_mountingFrame == Plane.Unset) { return false; }
-                if (_internalAxisPlanes.Count != 6) { return false; }
-                if (_meshes.Count != 8) { return false; }
+                if (_meshes.Count != NumberOfAxes + 2) { return false; }
                 if (_tool == null) { return false; }
                 if (_tool.IsValid == false) { return false; }
                 return true;
@@ -600,27 +496,6 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// Gets or sets the internal axis planes.
-        /// </summary>
-        /// <remarks>
-        /// The Z-axes of the planes define the rotation centers.
-        /// </remarks>
-        public List<Plane> InternalAxisPlanes
-        {
-            get { return _internalAxisPlanes; }
-            set { _internalAxisPlanes = value; UpdateKinematicsParameters(); }
-        }
-
-        /// <summary>
-        /// Gets or sets the axis limits in degrees.
-        /// </summary>
-        public List<Interval> InternalAxisLimits
-        {
-            get { return _internalAxisLimits; }
-            set { _internalAxisLimits = value; }
-        }
-
-        /// <summary>
         /// Gets or sets the position and orientation of the robot in world coordinate space. 
         /// </summary>
         public Plane BasePlane
@@ -630,20 +505,58 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// Gets or sets the tool mounting frame in world coordinate space.
+        /// Gets the tool mounting frame in world coordinate space.
         /// </summary>
         public Plane MountingFrame
         {
             get { return _mountingFrame; }
-            set { _mountingFrame = value; CalculateAttachedToolPlane(); }
         }
 
         /// <summary>
-        /// Gets the TCP plane in world coordinate space.
+        /// 
         /// </summary>
-        public Plane ToolPlane
+        public RobotKinematicParameters RobotKinematicParameters
         {
-            get { return _toolPlane; }
+            get 
+            { 
+                return _robotKinematicParameters; 
+            }
+            set 
+            { 
+                _robotKinematicParameters = value;
+                _internalAxisPlanes = _robotKinematicParameters.GetAxisPlanes(_basePlane, out _mountingFrame);
+                CalculateAttachedToolPlane(); 
+            }
+        }
+
+        /// <summary>
+        /// Gets the internal axis planes.
+        /// </summary>
+        /// <remarks>
+        /// The Z-axes of the planes define the rotation centers.
+        /// </remarks>
+        public Plane[] InternalAxisPlanes
+        {
+            get 
+            { 
+                return _internalAxisPlanes; 
+            }
+            set
+            {
+                _internalAxisPlanes = value;
+                _robotKinematicParameters = new RobotKinematicParameters(_basePlane, _internalAxisPlanes);
+                _robotKinematicParameters.GetAxisPlanes(_basePlane, out _mountingFrame);
+                CalculateAttachedToolPlane();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the axis limits in degrees.
+        /// </summary>
+        public Interval[] InternalAxisLimits
+        {
+            get { return _internalAxisLimits; }
+            set { _internalAxisLimits = value; }
         }
 
         /// <summary>
@@ -654,6 +567,14 @@ namespace RobotComponents.ABB.Definitions
             get { return _tool; }
             set { _tool = value; CalculateAttachedToolPlane();
             }
+        }
+
+        /// <summary>
+        /// Gets the TCP plane in world coordinate space.
+        /// </summary>
+        public Plane ToolPlane
+        {
+            get { return _toolPlane; }
         }
 
         /// <summary>
@@ -702,97 +623,224 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         public int NumberOfAxes
         {
-            get { return _internalAxisPlanes.Count; }
+            get { return 6; }
+        }
+        #endregion
+
+        #region obsolete
+        /// <summary>
+        /// Initializes a new instance of the Robot class without attached external axes.
+        /// </summary>
+        /// <param name="name"> The name. </param>
+        /// <param name="meshes"> The base and links meshes defined in the world coorindate space. </param>
+        /// <param name="internalAxisPlanes"> The internal axes planes defined in the world coorindate space. </param>
+        /// <param name="internalAxisLimits"> The internal axes limit. </param>
+        /// <param name="basePlane"> The position and orientation of the robot base in the world coordinate space. </param>
+        /// <param name="mountingFrame"> The tool mounting frame definied in the world coordinate space. </param>
+        /// <param name="tool"> The Robot Tool. </param>
+        [Obsolete("This constructor is OBSOLETE.", false)]
+        public Robot(string name, IList<Mesh> meshes, IList<Plane> internalAxisPlanes, IList<Interval> internalAxisLimits, Plane basePlane, Plane mountingFrame, RobotTool tool)
+        {
+            // Update robot related fields
+            _name = name;
+            _meshes = new List<Mesh>(meshes);
+            _robotKinematicParameters = new RobotKinematicParameters(basePlane, internalAxisPlanes);
+            _internalAxisPlanes = new List<Plane>(internalAxisPlanes).ToArray();
+            _internalAxisLimits = new List<Interval>(internalAxisLimits).ToArray();
+            _basePlane = new Plane(basePlane);
+            _mountingFrame = new Plane(mountingFrame);
+
+            // Update tool related fields
+            _tool = tool.Duplicate(); // Make a deep copy since we transform it later
+            _meshes.Add(GetAttachedToolMesh());
+            CalculateAttachedToolPlane();
+
+            // Update external axis related fields
+            _externalAxes = new List<IExternalAxis>();
+            _externalAxisPlanes = Enumerable.Repeat(Plane.Unset, 6).ToList();
+            _externalAxisLimits = Enumerable.Repeat(new Interval(), 6).ToList();
+
+            // Transform Robot Tool to Mounting Frame
+            Transform trans = Rhino.Geometry.Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
+            _tool.Transform(trans);
+
+            // Set kinematics
+            _inverseKinematics = new InverseKinematics(this);
+            _forwardKinematics = new ForwardKinematics(this);
         }
 
         /// <summary>
-        /// Gets the length of the lower arm.
+        /// Initializes a new instance of the Robot class with attached external axes.
         /// </summary>
-        /// <returns> The length of the lower arm. </returns>
-        public double LowerArmLength
+        /// <param name="name"> The name. </param>
+        /// <param name="meshes"> The base and links meshes defined in the world coorindate space. </param>
+        /// <param name="internalAxisPlanes"> The internal axes planes defined in the world coorindate space. </param>
+        /// <param name="internalAxisLimits"> The internal axes limit. </param>
+        /// <param name="basePlane"> The position and orientation of the robot base in the world coordinate space. </param>
+        /// <param name="mountingFrame"> The tool mounting frame definied in the world coordinate space. </param>
+        /// <param name="tool"> The Robot Tool. </param>
+        /// <param name="externalAxes"> The attached external axes. </param>
+        [Obsolete("This constructor is OBSOLETE.", false)]
+        public Robot(string name, IList<Mesh> meshes, IList<Plane> internalAxisPlanes, IList<Interval> internalAxisLimits, Plane basePlane, Plane mountingFrame, RobotTool tool, IList<IExternalAxis> externalAxes = null)
         {
-            get { return _lowerArmLength; }
-        }
+            // Robot related fields
+            _name = name;
+            _meshes = new List<Mesh>(meshes);
+            _robotKinematicParameters = new RobotKinematicParameters(basePlane, internalAxisPlanes);
+            _internalAxisPlanes = new List<Plane>(internalAxisPlanes).ToArray();
+            _internalAxisLimits = new List<Interval>(internalAxisLimits).ToArray();
+            _basePlane = new Plane(basePlane);
+            _mountingFrame = new Plane(mountingFrame);
 
-        /// <summary>
-        /// Gets the length of the upper arm.
-        /// </summary>
-        /// <returns> The length of the upper arm. </returns>
-        public double UpperArmLength
-        {
-            get { return _upperArmLength; }
-        }
+            // Tool related fields
+            _tool = tool.Duplicate(); // Make a deep copy since we transform it later
+            _meshes.Add(GetAttachedToolMesh());
+            CalculateAttachedToolPlane();
 
-        /// <summary>
-        /// Gets the total length of the elbow.
-        /// </summary>
-        public double ElbowLength
-        {
-            get { return _elbowLength; }
+            // External axis related fields
+            externalAxes = externalAxes ?? new List<IExternalAxis>();
+            _externalAxes = new List<IExternalAxis>(externalAxes);
+            _externalAxisPlanes = new List<Plane>();
+            _externalAxisLimits = new List<Interval>();
+            UpdateExternalAxisFields();
+
+            // Transform Robot Tool to Mounting Frame
+            Transform trans = Rhino.Geometry.Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
+            _tool.Transform(trans);
+
+            // Set kinematics
+            _inverseKinematics = new InverseKinematics(this);
+            _forwardKinematics = new ForwardKinematics(this);
         }
 
         /// <summary>
         /// Gets the OPW kinematics parameter A1.
         /// </summary>
+        [Obsolete("This property is OBSOLETE. Use RobotKinematicParameters.A1 instead.", false)]
         public double A1
         {
-            get { return _a1; }
+            get { return _robotKinematicParameters.A1; }
         }
 
         /// <summary>
         /// Gets the OPW kinematics parameter A2.
         /// </summary>
+        [Obsolete("This property is OBSOLETE. Use RobotKinematicParameters.A2 instead.", false)]
         public double A2
         {
-            get { return _a2; }
+            get { return _robotKinematicParameters.A2; }
         }
 
         /// <summary>
         /// Gets the wrist offset kinematics parameter A3.
         /// </summary>
+        [Obsolete("This property is OBSOLETE. Use RobotKinematicParameters.A3 instead.", false)]
         public double A3
         {
-            get { return _a3; }
+            get { return _robotKinematicParameters.A3; }
         }
 
         /// <summary>
         /// Gets the OPW kinematics parameter B.
         /// </summary>
+        [Obsolete("This property is OBSOLETE. Use RobotKinematicParameters.B instead.", false)]
         public double B
         {
-            get { return _b; }
+            get { return _robotKinematicParameters.B; }
         }
 
         /// <summary>
         /// Gets the OPW kinematics parameter C1.
         /// </summary>
+        [Obsolete("This property is OBSOLETE. Use RobotKinematicParameters.C1 instead.", false)]
         public double C1
         {
-            get { return _c1; }
+            get { return _robotKinematicParameters.C1; }
         }
 
         /// <summary>
         /// Gets the OPW kinematics parameter C2.
         /// </summary>
+        [Obsolete("This property is OBSOLETE. Use RobotKinematicParameters.C2 instead.", false)]
         public double C2
         {
-            get { return _c2; }
+            get { return _robotKinematicParameters.C2; }
         }
 
         /// <summary>
         /// Gets the OPW kinematics parameter C3.
         /// </summary>
+        [Obsolete("This property is OBSOLETE. Use RobotKinematicParameters.C3 instead.", false)]
         public double C3
         {
-            get { return _c3; }
+            get { return _robotKinematicParameters.C3; }
         }
 
         /// <summary>
         /// Gets the OPW kinematics parameter C4.
         /// </summary>
+        [Obsolete("This property is OBSOLETE. Use RobotKinematicParameters.C4 instead.", false)]
         public double C4
         {
-            get { return _c4; }
+            get { return _robotKinematicParameters.C4; }
+        }
+
+        /// <summary>
+        /// Returns the axis planes for the given kinematics parameters in world coordinate space. 
+        /// </summary>
+        /// <param name="basePlane"> The position and orientation of the robot base in the world coordinate space. </param>
+        /// <param name="a1"> Kinematics parameter A1. </param>
+        /// <param name="a2"> Kinematics parameter A2. </param>
+        /// <param name="a3"> Kinematics parameter A3. </param>
+        /// <param name="b"> Kinematics parameter B. </param>
+        /// <param name="c1"> Kinematics parameter C1. </param>
+        /// <param name="c2"> Kinematics parameter C2. </param>
+        /// <param name="c3"> Kinematics parameter C3. </param>
+        /// <param name="c4"> Kinematics parameter C4. </param>
+        /// <param name="mountingFrame"> The tool mounting frame. </param>
+        /// <returns> The axis planes. </returns>
+        [Obsolete("This method is OBSOLETE. Use RobotKinematicParameters.GetAxisPlanes() instead.", false)]
+        public static Plane[] GetAxisPlanesFromKinematicsParameters(Plane basePlane, double a1, double a2, double a3, double b, double c1, double c2, double c3, double c4, out Plane mountingFrame)
+        {
+            Plane[] planes = GetAxisPlanesFromKinematicsParameters(a1, a2, a3, b, c1, c2, c3, c4, out mountingFrame);
+            Transform orient = Rhino.Geometry.Transform.PlaneToPlane(Plane.WorldXY, basePlane);
+
+            for (int i = 0; i < planes.Length; i++)
+            {
+                planes[i].Transform(orient);
+            }
+
+            return planes;
+        }
+
+        /// <summary>
+        /// Returns the axis planes for the given kinematics parameters in local coordinate space. 
+        /// </summary>
+        /// <param name="a1"> Kinematics parameter A1. </param>
+        /// <param name="a2"> Kinematics parameter A2. </param>
+        /// <param name="a3"> Kinematics parameter A3. </param>
+        /// <param name="b"> Kinematics parameter B. </param>
+        /// <param name="c1"> Kinematics parameter C1. </param>
+        /// <param name="c2"> Kinematics parameter C2. </param>
+        /// <param name="c3"> Kinematics parameter C3. </param>
+        /// <param name="c4"> Kinematics parameter C4. </param>
+        /// <param name="mountingFrame"> The tool mounting frame. </param>
+        /// <returns> The axis planes. </returns>
+        [Obsolete("This method is OBSOLETE. Use RobotKinematicParameters.GetAxisPlanes() instead.", false)]
+        public static Plane[] GetAxisPlanesFromKinematicsParameters(double a1, double a2, double a3, double b, double c1, double c2, double c3, double c4, out Plane mountingFrame)
+        {
+            Plane[] planes = new Plane[6];
+
+            planes[0] = new Plane(new Point3d(0, 0, 0), new Vector3d(0, 0, 1));
+            planes[1] = new Plane(new Point3d(a1, 0, c1), new Vector3d(0, 1, 0));
+            planes[2] = new Plane(new Point3d(a1, 0, c1 + c2), new Vector3d(0, 1, 0));
+            planes[3] = new Plane(new Point3d(a1, -b, c1 + c2 - a2), new Vector3d(1, 0, 0));
+            planes[4] = new Plane(new Point3d(a1 + c3, -b, c1 + c2 - a2), new Vector3d(0, 1, 0));
+            planes[5] = new Plane(new Point3d(a1 + c3 + c4, -b, c1 + c2 - a2 - a3), new Vector3d(1, 0, 0));
+
+            mountingFrame = new Plane(new Point3d(planes[5].Origin), -Vector3d.ZAxis, Vector3d.YAxis);
+
+            return planes;
         }
         #endregion
     }

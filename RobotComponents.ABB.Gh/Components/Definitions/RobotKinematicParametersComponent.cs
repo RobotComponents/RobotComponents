@@ -2,10 +2,10 @@
 // This file is part of Robot Components
 // Project: https://github.com/RobotComponents/RobotComponents
 //
-// Copyright (c) 2024-2025 Arjen Deetman
+// Copyright (c) 2025 Arjen Deetman
 //
 // Authors:
-//   - Arjen Deetman (2024-2025)
+//   - Arjen Deetman (2025)
 //
 // For license details, see the LICENSE file in the project root.
 
@@ -16,21 +16,22 @@ using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
+using RobotComponents.ABB.Gh.Properties;
 
 namespace RobotComponents.ABB.Gh.Components.Definitions
 {
     /// <summary>
-    /// RobotComponents Get Robot Kinematics Parameters component.
+    /// RobotComponents Robot Kinematic Parameters component.
     /// </summary>
-    public class GetKinematicsParametersComponent : GH_RobotComponent
+    public class RobotKinematicParametersComponent : GH_RobotComponent
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public GetKinematicsParametersComponent() : base("Get Kinematics Parameters", "GetKiParams", "Definitions",
-              "Gets the kinematics parameters from a robot.")
+        public RobotKinematicParametersComponent() : base("Robot Kinematic Parameters", "RoKiPa", "Definitions",
+              "Defines the robot kinematic parameters.")
         {
         }
 
@@ -39,7 +40,14 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new Param_Robot(), "Robot", "R", "Robot as Robot", GH_ParamAccess.item);
+            pManager.AddNumberParameter("A1", "A1", "The shoulder offset as a Number.", GH_ParamAccess.item);
+            pManager.AddNumberParameter("A2", "A2", "The elbow offset as a Number.", GH_ParamAccess.item);
+            pManager.AddNumberParameter("A3", "A3", "The wrist offset as a Number.", GH_ParamAccess.item);
+            pManager.AddNumberParameter("B", "B", "The lateral offset as a Number.", GH_ParamAccess.item);
+            pManager.AddNumberParameter("C1", "C1", "The first link length as a Number.", GH_ParamAccess.item);
+            pManager.AddNumberParameter("C2", "C2", "The second link length as a Number.", GH_ParamAccess.item);
+            pManager.AddNumberParameter("C3", "C3", "The third link length as a Number.", GH_ParamAccess.item);
+            pManager.AddNumberParameter("C4", "C4", "The fourth link length as a Number.", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -47,14 +55,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddNumberParameter("A1", "A1", "The shoulder offset.", GH_ParamAccess.item);
-            pManager.AddNumberParameter("A2", "A2", "The elbow offset.", GH_ParamAccess.item);
-            pManager.AddNumberParameter("A3", "A3", "The wrist offset.", GH_ParamAccess.item);
-            pManager.AddNumberParameter("B", "B", "The lateral offset.", GH_ParamAccess.item);
-            pManager.AddNumberParameter("C1", "C1", "The first link length.", GH_ParamAccess.item);
-            pManager.AddNumberParameter("C2", "C2", "The second link length.", GH_ParamAccess.item);
-            pManager.AddNumberParameter("C3", "C3", "The third link length.", GH_ParamAccess.item);
-            pManager.AddNumberParameter("C4", "C4", "The fourth link length", GH_ParamAccess.item);
+            pManager.RegisterParam(new Param_RobotKinematicParameters(), "Kinematic Parameters", "KP", "Robot Kinematic Parameter", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -64,29 +65,30 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            Robot robot = null;
+            double a1 = 0;
+            double a2 = 0;
+            double a3 = 0;
+            double b = 0;
+            double c1 = 0;
+            double c2 = 0;
+            double c3 = 0;
+            double c4 = 0;
 
             // Catch the input data
-            if (!DA.GetData(0, ref robot)) { return; }
+            if (!DA.GetData(0, ref a1)) { return; }
+            if (!DA.GetData(1, ref a2)) { return; }
+            if (!DA.GetData(2, ref a3)) { return; }
+            if (!DA.GetData(3, ref b)) { return; }
+            if (!DA.GetData(4, ref c1)) { return; }
+            if (!DA.GetData(5, ref c2)) { return; }
+            if (!DA.GetData(6, ref c3)) { return; }
+            if (!DA.GetData(7, ref c4)) { return; }
 
-            if (robot != null)
-            {
-                // Check if the input is valid
-                if (!robot.IsValid)
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot is not valid");
-                }
+            // Axis Planes
+            RobotKinematicParameters param = new RobotKinematicParameters(a1, a2, a3, b, c1, c2, c3, c4);
 
-                // Output
-                DA.SetData(0, robot.A1);
-                DA.SetData(1, robot.A2);
-                DA.SetData(2, robot.A3);
-                DA.SetData(3, robot.B);
-                DA.SetData(4, robot.C1);
-                DA.SetData(5, robot.C2);
-                DA.SetData(6, robot.C3);
-                DA.SetData(7, robot.C4);
-            }
+            // Output
+            DA.SetData(0, param);
         }
 
         #region properties
@@ -96,7 +98,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.senary; }
+            get { return GH_Exposure.secondary; }
         }
 
         /// <summary>
@@ -112,7 +114,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.GetKinematicsParameters_Icon; }
+            get { return Resources.RobotKinematicParameters_Icon; }
         }
 
         /// <summary>
@@ -120,7 +122,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("76B45727-CA77-45CB-800B-417C60B67A3F"); }
+            get { return new Guid("4B5C6AB4-5481-4EEB-865D-3960D8250FAF"); }
         }
         #endregion
     }

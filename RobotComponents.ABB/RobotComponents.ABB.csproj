@@ -10,6 +10,7 @@
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <IncludeSymbols>False</IncludeSymbols>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>

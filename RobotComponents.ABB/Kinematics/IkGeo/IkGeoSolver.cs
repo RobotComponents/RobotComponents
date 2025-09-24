@@ -32,7 +32,7 @@ namespace RobotComponents.ABB.Kinematics.IkGeo
         private List<RobotJointPosition> _robotJointPositions = new List<RobotJointPosition>();
         private List<RobotJointPosition> _robotJointPositionsArranged = new List<RobotJointPosition>();
         private readonly Plane _base = Plane.WorldYZ;
-        private Robot _robot;
+        //private Robot _robot;
 
         // Constants
         private const double _pi = Math.PI;
@@ -43,9 +43,12 @@ namespace RobotComponents.ABB.Kinematics.IkGeo
         /// <summary>
         /// Initializes a new instance of the Inverse Kinematics class.
         /// </summary>
-        public IkGeoSolver(Robot robot)
+/*        public IkGeoSolver(Robot robot)
         {
             _robot = robot;
+        }*/
+        public IkGeoSolver()
+        {
         }
         #endregion
 
@@ -70,10 +73,10 @@ namespace RobotComponents.ABB.Kinematics.IkGeo
 
             // Check that robot matches
             // TODO refactor to avoid this.
-            if (_robot.Name != "CRB15000-5/0.95")
+/*            if (_robot.Name != "CRB15000-5/0.95")
             {
                 throw new Exception("Robot does not match function call.");
-            }
+            }*/
 
             // Reset the solution
             Reset();
@@ -115,7 +118,7 @@ namespace RobotComponents.ABB.Kinematics.IkGeo
         /// from ikfast are filled with default values (9e9). The definition of the
         /// Cfx parameter is taken from InverseKinematics.cs (main branch).
         /// </remarks>
-        private void ArrangeJointPositions()
+        /*private void ArrangeJointPositions()
         {
             // Cfx parameter defintion:
             //
@@ -199,7 +202,7 @@ namespace RobotComponents.ABB.Kinematics.IkGeo
                     _robotJointPositionsArranged.Add(jointPos);
                 }
             }
-        }
+        }*/
 
         /// <summary>
         /// Sort joint positions according to the ConfigurationComparer.
@@ -218,9 +221,14 @@ namespace RobotComponents.ABB.Kinematics.IkGeo
         /// <summary>
         /// Gets all calculated Robot Joint Positions.
         /// </summary>
-        public List<RobotJointPosition> RobotJointPositions
+/*        public List<RobotJointPosition> RobotJointPositions
         {
             get { return _robotJointPositionsArranged; }
+        }*/
+
+        public List<RobotJointPosition> RobotJointPositions
+        {
+            get { return _robotJointPositions; }
         }
 
         /// <summary>

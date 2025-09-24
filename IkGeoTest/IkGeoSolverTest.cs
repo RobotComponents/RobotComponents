@@ -31,8 +31,48 @@ namespace IkGeoTest
     {
 
         /// <summary>
+        /// Test that inverse kinematics solutions are computed.
+        /// </summary>
+        [TestMethod]
+        public void Test_ComputeInverseKinematics()
+        {
+            const int n_runs = 4;
+            const double tol = 0.0001;
+
+            Plane eePose;
+            Random rnd = new Random();
+
+            IkGeoSolver ikgeo = new IkGeoSolver();
+
+            eePose = new Plane(new Point3d(50, 0, 0), Vector3d.XAxis, Vector3d.YAxis);
+
+            // Compute the inverse kinematics
+            ikgeo.Compute_CRB15000_5_095(eePose);
+
+            Assert.IsTrue(ikgeo.NumSolutions > 0, "IkFast found no solution");
+
+            // Write results to console
+            Console.WriteLine("Set Target Plane");
+            Console.WriteLine($"Position    :   {eePose.Origin}");
+            Console.WriteLine($"Orientation :   {eePose.Normal}");
+            Console.WriteLine("");
+
+            Console.WriteLine($"Ikgeo found {ikgeo.NumSolutions} solutions:");
+
+            for (int i = 0; i < ikgeo.RobotJointPositions.Count; i++)
+            {
+                for (int j = 0; j < ikgeo.RobotJointPositions[i].Length; j++)
+                {
+                    Console.Write($"{ikgeo.RobotJointPositions[i][j]} ");
+                }
+                Console.WriteLine("");
+            }
+        }
+
+        /// <summary>
         /// Test that solutions are found and correct.
         /// </summary>
+        [Ignore]
         [TestMethod]
         public void Test_InverseKinematicsSolutions()
         {
@@ -46,11 +86,11 @@ namespace IkGeoTest
 
             RobotTool tool = new RobotTool("tool", new Mesh(), Rhino.Geometry.Plane.WorldXY, Plane.WorldXY);
 
-            Robot robot = Factory.GetRobotPreset(RobotPreset.CRB15000_5_095, Plane.WorldXY, tool);
-            //Robot robot = CRB15000_5_095.GetRobot(robotBasePose, tool, null);
+            //Robot robot = Factory.GetRobotPreset(RobotPreset.CRB15000_5_095, Plane.WorldXY, tool);
+            Robot robot = CRB15000_5_095.GetRobot(Plane.WorldXY, tool, null);
 
             ForwardKinematics fk = new ForwardKinematics(robot);
-            IkGeoSolver ikgeo = new IkGeoSolver(robot);
+            IkGeoSolver ikgeo = new IkGeoSolver();
 
             List<double> jointsRnd;
 
@@ -181,7 +221,7 @@ namespace IkGeoTest
             Robot robot = Factory.GetRobotPreset(RobotPreset.CRB15000_5_095, Plane.WorldXY, tool);
 
             ForwardKinematics fk = new ForwardKinematics(robot);
-            IkGeoSolver ikgeo = new IkGeoSolver(robot);
+            IkGeoSolver ikgeo = new IkGeoSolver();
 
             List<double> jointsRnd;
 

@@ -47,6 +47,12 @@ namespace RobotComponents.ABB.Kinematics.IkGeo
         {
             _robot = robot;
         }
+
+        /*
+        public IkGeoSolver()
+        {
+        }
+        */
         #endregion
 
         #region methods
@@ -78,15 +84,14 @@ namespace RobotComponents.ABB.Kinematics.IkGeo
             // Reset the solution
             Reset();
 
-            // Target rotated 90 degrees (unknown reason)
-            Plane target = new Plane(endPlane);
-            target.Rotate(0.5 * _pi, target.ZAxis, target.Origin);
+            // Target rotated 90 degrees (probably due to inconsistent end effector definition)
+            endPlane.Rotate(0.5 * _pi, endPlane.XAxis, endPlane.Origin);
 
-            // Position
-            IkGeo.Geometry.Vector3d position = new IkGeo.Geometry.Vector3d(target.Origin);
+            // Position (in meters!)
+            IkGeo.Geometry.Vector3d position = new IkGeo.Geometry.Vector3d(1e-3 * endPlane.Origin);
 
             // Orientation as quaternion
-            Rhino.Geometry.Quaternion quaternion = Rhino.Geometry.Quaternion.Rotation(_base, target);
+            Rhino.Geometry.Quaternion quaternion = Rhino.Geometry.Quaternion.Rotation(_base, endPlane);
             IkGeo.Geometry.Quaternion orientation = new IkGeo.Geometry.Quaternion(quaternion);
 
             RobotJointPosition robotJointPosition;
@@ -104,7 +109,7 @@ namespace RobotComponents.ABB.Kinematics.IkGeo
                 }
             }
 
-            //ArrangeJointPositions();
+            ArrangeJointPositions();
         }
 
         /// <summary>
@@ -218,9 +223,14 @@ namespace RobotComponents.ABB.Kinematics.IkGeo
         /// <summary>
         /// Gets all calculated Robot Joint Positions.
         /// </summary>
-        public List<RobotJointPosition> RobotJointPositions
+/*        public List<RobotJointPosition> RobotJointPositions
         {
             get { return _robotJointPositionsArranged; }
+        }*/
+
+        public List<RobotJointPosition> RobotJointPositions
+        {
+            get { return _robotJointPositions; }
         }
 
         /// <summary>

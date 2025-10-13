@@ -21,6 +21,7 @@ using RobotComponents.ABB.Presets.Enumerations;
 // Rhino Libs
 using Rhino;
 using Rhino.Geometry;
+using System.Diagnostics;
 //using RobotComponents.ABB.Actions.Interfaces;
 
 
@@ -34,17 +35,14 @@ namespace IkGeoTest
         /// Test that inverse kinematics solutions are computed.
         /// </summary>
         [TestMethod]
-        public void Test_ComputeInverseKinematics()
+        public void Test_IKSolutionFound()
         {
-            const int n_runs = 4;
-            const double tol = 0.0001;
+            RobotTool tool = new RobotTool("tool", new Mesh(), Rhino.Geometry.Plane.WorldXY, Plane.WorldXY);
+            Robot robot = Factory.GetRobotPreset(RobotPreset.CRB15000_5_095, Plane.WorldXY, tool);
 
-            Plane eePose;
-            Random rnd = new Random();
+            IkGeoSolver ikgeo = new IkGeoSolver(robot);
 
-            IkGeoSolver ikgeo = new IkGeoSolver();
-
-            eePose = new Plane(new Point3d(50, 0, 0), Vector3d.XAxis, Vector3d.YAxis);
+            Plane eePose = new Plane(new Point3d(500, 0, 200), Vector3d.XAxis, Vector3d.YAxis);
 
             // Compute the inverse kinematics
             ikgeo.Compute_CRB15000_5_095(eePose);
@@ -70,14 +68,16 @@ namespace IkGeoTest
         }
 
         /// <summary>
-        /// Test that solutions are found and correct.
+        /// Test solutions are found and correct for multiple target poses.
         /// </summary>
-        [Ignore]
         [TestMethod]
-        public void Test_InverseKinematicsSolutions()
+        public void Test_IKSolutionsCorrect()
         {
             const int n_runs = 4;
             const double tol = 0.0001;
+
+            int valid_sol_count = 0;
+            int valid_run_count = 0;
 
             Plane eePose;
             Plane eePose_recomputed;
@@ -85,12 +85,10 @@ namespace IkGeoTest
             Random rnd = new Random();
 
             RobotTool tool = new RobotTool("tool", new Mesh(), Rhino.Geometry.Plane.WorldXY, Plane.WorldXY);
-
-            //Robot robot = Factory.GetRobotPreset(RobotPreset.CRB15000_5_095, Plane.WorldXY, tool);
-            Robot robot = CRB15000_5_095.GetRobot(Plane.WorldXY, tool, null);
+            Robot robot = Factory.GetRobotPreset(RobotPreset.CRB15000_5_095, Plane.WorldXY, tool);
 
             ForwardKinematics fk = new ForwardKinematics(robot);
-            IkGeoSolver ikgeo = new IkGeoSolver();
+            IkGeoSolver ikgeo = new IkGeoSolver(robot);
 
             List<double> jointsRnd;
 
@@ -122,6 +120,8 @@ namespace IkGeoTest
 
                 Assert.IsTrue(ikgeo.NumSolutions > 0, "IkFast found no solution");
 
+                valid_sol_count = 0;
+
                 // Recompute EE pose (forward kinematics) for all solutions and compare
                 for (int j = 0; j < ikgeo.RobotJointPositions.Count; j++)
                 {
@@ -145,26 +145,47 @@ namespace IkGeoTest
 
                     eePose_recomputed = fk.TCPPlane;
 
-                    // Compare precomputed EE pose with EE pose recomputed through ikgen
-                    Assert.AreEqual(eePose.OriginX, eePose_recomputed.OriginX, tol, "Pos x");
-                    Assert.AreEqual(eePose.OriginY, eePose_recomputed.OriginY, tol, "Pos y");
-                    Assert.AreEqual(eePose.OriginZ, eePose_recomputed.OriginZ, tol, "Pos z");
-                    Assert.AreEqual(eePose.Normal.X, eePose_recomputed.Normal.X, tol, "Normal x");
-                    Assert.AreEqual(eePose.Normal.Y, eePose_recomputed.Normal.Y, tol, "Normal y");
-                    Assert.AreEqual(eePose.Normal.Z, eePose_recomputed.Normal.Z, tol, "Normal z");
+                    // Compare precomputed EE pose with EE pose recomputed through ikgeo.
+                    // position: compute length; orientation: compute angle between normals
+                    double delta_pos = (eePose.Origin - eePose_recomputed.Origin).Length;
+                    double delta_ori = Math.Acos( eePose.Normal * eePose_recomputed.Normal / 
+                        (eePose.Normal.Length * eePose_recomputed.Normal.Length));
+
+                    if (delta_pos > tol || delta_ori > tol)
+                    {
+                        Console.WriteLine($"Run {i}, solution {j} incorrect: delta pos: {delta_pos} delta ori: {delta_ori}");
+                    }
+                    else
+                    {
+                        valid_sol_count++;
+
+                        /*
+                        Assert.AreEqual(eePose.OriginX, eePose_recomputed.OriginX, tol, "Pos x");
+                        Assert.AreEqual(eePose.OriginY, eePose_recomputed.OriginY, tol, "Pos y");
+                        Assert.AreEqual(eePose.OriginZ, eePose_recomputed.OriginZ, tol, "Pos z");
+                        Assert.AreEqual(eePose.Normal.X, eePose_recomputed.Normal.X, tol, "Normal x");
+                        Assert.AreEqual(eePose.Normal.Y, eePose_recomputed.Normal.Y, tol, "Normal y");
+                        Assert.AreEqual(eePose.Normal.Z, eePose_recomputed.Normal.Z, tol, "Normal z");
+                        */
+                    }
                 }
 
-                Console.WriteLine($"Run {i}: all {ikgeo.NumSolutions} ik solutions are correct");
+                if (valid_sol_count == ikgeo.NumSolutions)
+                {
+                    Console.WriteLine($"Run {i}: all {ikgeo.NumSolutions} ik solutions are correct");
+
+                    valid_run_count++;
+                }
             }
-            
+
+            Assert.AreEqual(n_runs, valid_run_count, "Some test runs produced incorrect pose recomputation.");
         }
 
         /// <summary>
         /// Test that the ConfigurationComparer sorts joint positions in desired order.
         /// </summary>
-		[Ignore]
         [TestMethod]
-        public void Test_ConfigurationComparer()
+        public void Test_ConfigurationComparerCorrect()
         {
             // Test only the public comparer class
             RobotComponents.ABB.Kinematics.IkGeo.ConfigurationComparer comparer = 
@@ -204,11 +225,11 @@ namespace IkGeoTest
         }
 
         /// <summary>
-        /// Test that arranged joint positions are complete.
+        /// Test that arranged list of joint positions is complete.
         /// </summary>
-        [Ignore] // Requires modification in ArrangeJointPositions.
+        [Ignore] // Requires modification in ArrangeJointPositions().
         [TestMethod]
-        public void Test_ArrangedJointPositions()
+        public void Test_ArrangedJointPositionsComplete()
         {
             const int n_runs = 4;
 
@@ -221,7 +242,7 @@ namespace IkGeoTest
             Robot robot = Factory.GetRobotPreset(RobotPreset.CRB15000_5_095, Plane.WorldXY, tool);
 
             ForwardKinematics fk = new ForwardKinematics(robot);
-            IkGeoSolver ikgeo = new IkGeoSolver();
+            IkGeoSolver ikgeo = new IkGeoSolver(robot);
 
             List<double> jointsRnd;
 

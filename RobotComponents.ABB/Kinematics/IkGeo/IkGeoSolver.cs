@@ -32,7 +32,7 @@ namespace RobotComponents.ABB.Kinematics.IkGeo
         private List<RobotJointPosition> _robotJointPositions = new List<RobotJointPosition>();
         private List<RobotJointPosition> _robotJointPositionsArranged = new List<RobotJointPosition>();
         private readonly Plane _base = Plane.WorldYZ;
-        //private Robot _robot;
+        private Robot _robot;
 
         // Constants
         private const double _pi = Math.PI;
@@ -43,13 +43,16 @@ namespace RobotComponents.ABB.Kinematics.IkGeo
         /// <summary>
         /// Initializes a new instance of the Inverse Kinematics class.
         /// </summary>
-/*        public IkGeoSolver(Robot robot)
+        public IkGeoSolver(Robot robot)
         {
             _robot = robot;
-        }*/
+        }
+
+        /*
         public IkGeoSolver()
         {
         }
+        */
         #endregion
 
         #region methods
@@ -73,23 +76,22 @@ namespace RobotComponents.ABB.Kinematics.IkGeo
 
             // Check that robot matches
             // TODO refactor to avoid this.
-/*            if (_robot.Name != "CRB15000-5/0.95")
+            if (_robot.Name != "CRB15000-5/0.95")
             {
                 throw new Exception("Robot does not match function call.");
-            }*/
+            }
 
             // Reset the solution
             Reset();
 
-            // Target rotated 90 degrees (unknown reason)
-            Plane target = new Plane(endPlane);
-            target.Rotate(0.5 * _pi, target.ZAxis, target.Origin);
+            // Target rotated 90 degrees (probably due to inconsistent end effector definition)
+            endPlane.Rotate(0.5 * _pi, endPlane.XAxis, endPlane.Origin);
 
-            // Position
-            IkGeo.Geometry.Vector3d position = new IkGeo.Geometry.Vector3d(target.Origin);
+            // Position (in meters!)
+            IkGeo.Geometry.Vector3d position = new IkGeo.Geometry.Vector3d(1e-3 * endPlane.Origin);
 
             // Orientation as quaternion
-            Rhino.Geometry.Quaternion quaternion = Rhino.Geometry.Quaternion.Rotation(_base, target);
+            Rhino.Geometry.Quaternion quaternion = Rhino.Geometry.Quaternion.Rotation(_base, endPlane);
             IkGeo.Geometry.Quaternion orientation = new IkGeo.Geometry.Quaternion(quaternion);
 
             RobotJointPosition robotJointPosition;
@@ -107,7 +109,7 @@ namespace RobotComponents.ABB.Kinematics.IkGeo
                 }
             }
 
-            //ArrangeJointPositions();
+            ArrangeJointPositions();
         }
 
         /// <summary>
@@ -118,7 +120,7 @@ namespace RobotComponents.ABB.Kinematics.IkGeo
         /// from ikfast are filled with default values (9e9). The definition of the
         /// Cfx parameter is taken from InverseKinematics.cs (main branch).
         /// </remarks>
-        /*private void ArrangeJointPositions()
+        private void ArrangeJointPositions()
         {
             // Cfx parameter defintion:
             //
@@ -202,7 +204,7 @@ namespace RobotComponents.ABB.Kinematics.IkGeo
                     _robotJointPositionsArranged.Add(jointPos);
                 }
             }
-        }*/
+        }
 
         /// <summary>
         /// Sort joint positions according to the ConfigurationComparer.

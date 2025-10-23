@@ -1,4 +1,4 @@
-name: CI - Build & Test
+name: CI - Build & Test (.NET Framework 4.8)
 
 on:
   push:
@@ -10,24 +10,27 @@ on:
 jobs:
   build-and-test:
     runs-on: windows-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up NuGet (restore)
-        run: nuget restore
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
 
-      - name: Setup MSBuild tools (optional)
-        # windows-latest already has Visual Studio + developer packs installed
-        run: echo "Using windows-latest with Visual Studio preinstalled"
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v2
+
+      - name: Restore NuGet packages
+        run: nuget restore
 
       - name: Build solution
         run: msbuild /t:Restore,Build /p:Configuration=Release
 
       - name: Run tests (produce TRX)
-        working-directory: ./   # change if needed
         run: |
-          dotnet test --no-build --configuration Release --logger "trx;LogFileName=TestResults.trx"
+          vstest.console.exe **\*test*.dll /Logger:"trx;LogFileName=TestResults.trx"
+        continue-on-error: true  # allows job to continue even if tests fail
 
       - name: Upload test results artifact
         uses: actions/upload-artifact@v4

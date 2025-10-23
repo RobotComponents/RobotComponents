@@ -1,7 +1,16 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2018-2020 EDEK Uni Kassel
+// Copyright (c) 2020-2025 Arjen Deetman
+//
+// Authors:
+//   - Gabriel Rumph (2018-2020)
+//   - Benedikt Wannemacher (2018-2020)
+//   - Arjen Deetman (2019-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System;
@@ -17,14 +26,13 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Gh.Parameters.Definitions;
 using RobotComponents.ABB.Definitions;
-using RobotComponents.ABB.Gh.Utils;
 
 namespace RobotComponents.ABB.Gh.Components.Definitions
 {
     /// <summary>
-    /// RobotComponents External Linear Axis component. An inherent from the GH_Component Class.
+    /// RobotComponents External Linear Axis component.
     /// </summary>
-    public class ExternalLinearAxisComponent : GH_Component, IGH_VariableParameterComponent
+    public class ExternalLinearAxisComponent : GH_RobotComponent, IGH_VariableParameterComponent
     {
         #region fields
         private bool _axisLogicNumber = false;
@@ -37,12 +45,8 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public ExternalLinearAxisComponent()
-          : base("External Linear Axis", "External Linear Axis",
-              "Defines an External Linear Axis for any Robot."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Definitions")
+        public ExternalLinearAxisComponent() : base("External Linear Axis", "External Linear Axis", "Definitions",
+              "Defines an External Linear Axis for any Robot.")
         {
             // Create the component label with a message
             Message = "EXTENDABLE";
@@ -177,19 +181,8 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
             Menu_AppendItem(menu, "Set Axis Logic Number", MenuItemClickAxisLogic, true, _axisLogicNumber);
             Menu_AppendItem(menu, "Set Moves Robot", MenuItemClickMovesRobot, true, _movesRobot);
             Menu_AppendSeparator(menu);
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
 
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
+            base.AppendAdditionalComponentMenuItems(menu);
         }
 
         /// <summary>

@@ -1,11 +1,19 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2018-2020 EDEK Uni Kassel
+// Copyright (c) 2020-2025 Arjen Deetman
+//
+// Authors:
+//   - Gabriel Rumph (2018-2020)
+//   - Benedikt Wannemacher (2018-2020)
+//   - Arjen Deetman (2019-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System;
-using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
 // Grasshopper Libs
@@ -18,17 +26,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Definitions
     /// <summary>
     /// Robot Tool parameter
     /// </summary>
-    public class Param_RobotTool : GH_PersistentGeometryParam<GH_RobotTool>, IGH_PreviewObject
+    public class Param_RobotTool : GH_RobotParam<GH_RobotTool>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<GH_RobotTool> class
+        /// Initializes a new instance of the Param_RobotToo class
         /// </summary>
-        public Param_RobotTool()
-          : base(new GH_InstanceDescription("Robot Tool", "RT",
-                "Contains the data of a Robot Tool."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-                "Robot Components ABB", "Parameters"))
+        public Param_RobotTool() : base("Robot Tool", "RT", "Parameters",
+                "Contains the data of a Robot Tool.")
         {
         }
 
@@ -71,41 +75,6 @@ namespace RobotComponents.ABB.Gh.Parameters.Definitions
         {
             get { return new Guid("78DB5BA0-B153-4EA3-A2A7-40F5A8166604"); }
         }
-
-        // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
-        #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_RobotTool> values)
-        {
-            return GH_GetterResult.cancel;
-        }
-
-        protected override GH_GetterResult Prompt_Singular(ref GH_RobotTool value)
-        {
-            return GH_GetterResult.cancel;
-        }
-
-        protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomSingleValueItem()
-        {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
-            {
-                Text = "Not available",
-                Visible = false
-            };
-
-            return item;
-        }
-
-        protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomMultiValueItem()
-        {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
-            {
-                Text = "Not available",
-                Visible = false
-            };
-
-            return item;
-        }
-        #endregion
 
         #region preview methods
         /// <summary>
@@ -159,5 +128,4 @@ namespace RobotComponents.ABB.Gh.Parameters.Definitions
         }
         #endregion
     }
-
 }

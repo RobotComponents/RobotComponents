@@ -1,35 +1,38 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2024-2025 Arjen Deetman
+//
+// Authors:
+//   - Arjen Deetman (2024-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System;
-using System.Windows.Forms;
-// Rhino Libs
-using Rhino.Geometry;
 // Grasshopper Libs
 using Grasshopper.Kernel;
+// Rhino Libs
+using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
-using RobotComponents.ABB.Gh.Utils;
+using RobotComponents.ABB.Gh.Parameters.Definitions;
 
 namespace RobotComponents.ABB.Gh.Components.Definitions
 {
     /// <summary>
-    /// RobotComponents Get Axis Planes from Kinematics Parameters component. An inherent from the GH_Component Class.
+    /// RobotComponents Get Axis Planes from Kinematics Parameters component.
     /// </summary>
-    public class GetAxisPlanesFromKinematicsParametersComponent : GH_Component
+    public class GetAxisPlanesFromKinematicsParametersComponent : GH_RobotComponent
     {
         /// <summary>
-        /// Initializes a new instance of the KinematicsParametersToAxisPlanesComponent class.
+        /// Each implementation of GH_Component must provide a public constructor without any arguments.
+        /// Category represents the Tab in which the component will appear, Subcategory the panel. 
+        /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public GetAxisPlanesFromKinematicsParametersComponent()
-          : base("Get Axis Planes from Kinematics Parameters", "KiPa2AxPl",
-              "Gets the robot axis planes from the given robot kinematics parameters."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Definitions")
+        public GetAxisPlanesFromKinematicsParametersComponent() : base("Get Axis Planes from Robot Kinematics Parameters", "KiPa2AxPl", "Definitions",
+              "Gets the robot axis planes from the given robot kinematics parameters.")
         {
         }
 
@@ -38,15 +41,8 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddPlaneParameter("Position Plane", "P", "Position Plane of the Robot as Plane", GH_ParamAccess.item, Plane.WorldXY);
-            pManager.AddNumberParameter("A1", "A1", "The shoulder offset as a Number.", GH_ParamAccess.item);
-            pManager.AddNumberParameter("A2", "A2", "The elbow offset as a Number.", GH_ParamAccess.item);
-            pManager.AddNumberParameter("A3", "A3", "The wrist offset as a Number.", GH_ParamAccess.item);
-            pManager.AddNumberParameter("B", "B", "The lateral offset as a Number.", GH_ParamAccess.item);
-            pManager.AddNumberParameter("C1", "C1", "The first link length as a Number.", GH_ParamAccess.item);
-            pManager.AddNumberParameter("C2", "C2", "The second link length as a Number.", GH_ParamAccess.item);
-            pManager.AddNumberParameter("C3", "C3", "The third link length as a Number.", GH_ParamAccess.item);
-            pManager.AddNumberParameter("C4", "C4", "The fourth link length as a Number.", GH_ParamAccess.item);
+            pManager.AddPlaneParameter("Position Plane", "PP", "Position Plane of the Robot as Plane", GH_ParamAccess.item, Plane.WorldXY);
+            pManager.AddParameter(new Param_RobotKinematicParameters(), "Kinematic Parameters", "KP", "Robot Kinematic Parameters", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -66,28 +62,14 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         {
             // Input variables
             Plane plane = Plane.WorldXY;
-            double a1 = 0;
-            double a2 = 0;
-            double a3 = 0;
-            double b = 0;
-            double c1 = 0;
-            double c2 = 0;
-            double c3 = 0;
-            double c4 = 0;
+            RobotKinematicParameters param = new RobotKinematicParameters();
 
             // Catch the input data
             if (!DA.GetData(0, ref plane)) { return; }
-            if (!DA.GetData(1, ref a1)) { return; }
-            if (!DA.GetData(2, ref a2)) { return; }
-            if (!DA.GetData(3, ref a3)) { return; }
-            if (!DA.GetData(4, ref b)) { return; }
-            if (!DA.GetData(5, ref c1)) { return; }
-            if (!DA.GetData(6, ref c2)) { return; }
-            if (!DA.GetData(7, ref c3)) { return; }
-            if (!DA.GetData(8, ref c4)) { return; }
+            if (!DA.GetData(1, ref param)) { return; }
 
             // Axis Planes
-            Plane[] axisPlanes = Robot.GetAxisPlanesFromKinematicsParameters(plane, a1, a2, a3, b, c1, c2, c3, c4, out Plane mountingFrame);
+            Plane[] axisPlanes = param.GetAxisPlanes(plane, out Plane mountingFrame);
 
             // Output
             DA.SetDataList(0, axisPlanes);
@@ -125,30 +107,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("AA7A04CC-FFE2-487A-95D3-AF12E62D5BDB"); }
-        }
-        #endregion
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
+            get { return new Guid("B35CC990-6885-4D62-BA18-C73200E901D4"); }
         }
         #endregion
     }

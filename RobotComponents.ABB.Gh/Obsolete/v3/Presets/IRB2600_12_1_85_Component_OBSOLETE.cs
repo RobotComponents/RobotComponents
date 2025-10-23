@@ -1,7 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
 
 // System Libs
 using System;
@@ -13,7 +11,8 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
-using RobotComponents.ABB.Presets.Robots;
+using RobotComponents.ABB.Presets;
+using RobotComponents.ABB.Presets.Enumerations;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
 using RobotComponents.ABB.Gh.Utils;
 
@@ -76,7 +75,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
 
             try
             {
-                robot = IRB2600_12_185.GetRobot(positionPlane, tool, externalAxis);
+                robot = Factory.GetRobotPreset(RobotPreset.IRB2600_12_185, positionPlane, tool, externalAxis);
             }
             catch (Exception ex)
             {

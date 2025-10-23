@@ -1,11 +1,19 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2018-2020 EDEK Uni Kassel
+// Copyright (c) 2020-2025 Arjen Deetman
+//
+// Authors:
+//   - Gabriel Rumph (2018-2020)
+//   - Benedikt Wannemacher (2018-2020)
+//   - Arjen Deetman (2019-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System;
-using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
@@ -16,17 +24,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Dynamic
     /// <summary>
     /// Comment parameter
     /// </summary>
-    public class Param_Comment : GH_PersistentParam<GH_Comment>
+    public class Param_Comment : GH_RobotParam<GH_Comment>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<GH_Comment> class
+        /// Initializes a new instance of the Param_Comment class
         /// </summary>
-        public Param_Comment()
-          : base(new GH_InstanceDescription("Comment Parameter", "C",
-                "Contains the data of a Comment."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-                "Robot Components ABB", "Parameters"))
+        public Param_Comment() : base("Comment Parameter", "C", "Parameters",
+                "Contains the data of a Comment.")
         {
         }
 
@@ -72,40 +76,5 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Dynamic
         {
             get { return new Guid("2154A09B-BC1F-40B5-BD5B-59ABEC37B2E3"); }
         }
-
-        // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
-        #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_Comment> values)
-        {
-            return GH_GetterResult.cancel;
-        }
-
-        protected override GH_GetterResult Prompt_Singular(ref GH_Comment value)
-        {
-            return GH_GetterResult.cancel;
-        }
-
-        protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomSingleValueItem()
-        {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
-            {
-                Text = "Not available",
-                Visible = false
-            };
-
-            return item;
-        }
-
-        protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomMultiValueItem()
-        {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
-            {
-                Text = "Not available",
-                Visible = false
-            };
-
-            return item;
-        }
-        #endregion
     }
 }

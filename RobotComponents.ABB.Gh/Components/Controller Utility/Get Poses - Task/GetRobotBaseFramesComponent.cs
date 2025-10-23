@@ -1,12 +1,17 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2022-2025 Arjen Deetman
+//
+// Authors:
+//   - Arjen Deetman (2022-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // Rhino Libs
@@ -14,14 +19,13 @@ using Rhino.Geometry;
 // Robot Components Libs
 using RobotComponents.ABB.Controllers;
 using RobotComponents.ABB.Gh.Parameters.Controllers;
-using RobotComponents.ABB.Gh.Utils;
 
 namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// Represents the component that get the base frames of the robots from a defined controller. An inherent from the GH_Component Class.
+    /// Represents the component that get the base frames of the robots from a defined controller.
     /// </summary>
-    public class GetRobotBaseFramesComponent : GH_Component
+    public class GetRobotBaseFramesComponent : GH_RobotComponent
     {
         #region fields
         private Controller _controller;
@@ -30,14 +34,10 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <summary>
         /// Initializes a new instance of the GetRobotBaseFrameComponent class.
         /// </summary>
-        public GetRobotBaseFramesComponent()
-          : base("Get Robot Base Frames", "GetBF",
+        public GetRobotBaseFramesComponent() : base("Get Robot Base Frames", "GetBF", "Controller Utility",
               "Gets the robot base frame from an ABB controller."
-               + System.Environment.NewLine + System.Environment.NewLine +
-                "This component uses the ABB PC SDK." +
-                System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Controller Utility")
+                + System.Environment.NewLine + System.Environment.NewLine +
+                "This component uses the ABB PC SDK.")
         {
         }
 
@@ -122,29 +122,6 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         public override Guid ComponentGuid
         {
             get { return new Guid("A399E86A-1DFA-4825-895B-8FE4218390E1"); }
-        }
-        #endregion
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
         }
         #endregion
     }

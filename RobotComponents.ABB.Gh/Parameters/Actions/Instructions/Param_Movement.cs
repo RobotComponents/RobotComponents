@@ -1,11 +1,19 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2018-2020 EDEK Uni Kassel
+// Copyright (c) 2020-2025 Arjen Deetman
+//
+// Authors:
+//   - Gabriel Rumph (2018-2020)
+//   - Benedikt Wannemacher (2018-2020)
+//   - Arjen Deetman (2019-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System;
-using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
 // Grasshopper Libs
@@ -18,17 +26,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     /// <summary>
     /// Movement parameter
     /// </summary>
-    public class Param_Movement : GH_PersistentGeometryParam<GH_Movement>, IGH_PreviewObject
+    public class Param_Movement : GH_RobotParam<GH_Movement>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<MovementGoo> class
+        /// Initializes a new instance of the Param_Movement class.
         /// </summary>
-        public Param_Movement()
-          : base(new GH_InstanceDescription("Move Parameter", "M",
-                "Contains the data of a Move instruction."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-                "Robot Components ABB", "Parameters"))
+        public Param_Movement() : base("Move Parameter", "M", "Parameters",
+                "Contains the data of a Move instruction.")
         {
         }
 
@@ -71,41 +75,6 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         {
             get { return new Guid("0C14B6CF-3D00-4A02-B42F-99EE159AEE6D"); }
         }
-
-        // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
-        #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_Movement> values)
-        {
-            return GH_GetterResult.cancel;
-        }
-
-        protected override GH_GetterResult Prompt_Singular(ref GH_Movement value)
-        {
-            return GH_GetterResult.cancel;
-        }
-
-        protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomSingleValueItem()
-        {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
-            {
-                Text = "Not available",
-                Visible = false
-            };
-
-            return item;
-        }
-
-        protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomMultiValueItem()
-        {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
-            {
-                Text = "Not available",
-                Visible = false
-            };
-
-            return item;
-        }
-        #endregion
 
         #region preview methods
         /// <summary>

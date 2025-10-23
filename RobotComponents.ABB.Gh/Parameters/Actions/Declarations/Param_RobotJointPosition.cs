@@ -1,7 +1,14 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2020 EDEK Uni Kassel
+// Copyright (c) 2020-2025 Arjen Deetman
+//
+// Authors:
+//   - Arjen Deetman (2020-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System;
@@ -16,17 +23,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Declarations
     /// <summary>
     /// Robot Joint Position parameter
     /// </summary>
-    public class Param_RobotJointPosition : GH_PersistentParam<GH_RobotJointPosition>
+    public class Param_RobotJointPosition : GH_RobotParam<GH_RobotJointPosition>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<RobotJointPositionGoo> class
+        /// Initializes a new instance of the Param_RobotJointPosition class
         /// </summary>
-        public Param_RobotJointPosition()
-          : base(new GH_InstanceDescription("Robot Joint Position Parameter", "RJ",
-                "Contains the data of a Robot Joint Position declaration."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components : v" + RobotComponents.VersionNumbering.CurrentVersion,
-                "Robot Components ABB", "Parameters"))
+        public Param_RobotJointPosition() : base("Robot Joint Position Parameter", "RJ", "Parameters",
+                "Contains the data of a Robot Joint Position declaration.")
         {
         }
 
@@ -69,40 +72,5 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Declarations
         {
             get { return new Guid("2D735AA0-FE6D-451F-A98E-16AF369B1EA3"); }
         }
-
-        // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
-        #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_RobotJointPosition> values)
-        {
-            return GH_GetterResult.cancel;
-        }
-
-        protected override GH_GetterResult Prompt_Singular(ref GH_RobotJointPosition value)
-        {
-            return GH_GetterResult.cancel;
-        }
-
-        protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomSingleValueItem()
-        {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
-            {
-                Text = "Not available",
-                Visible = false
-            };
-
-            return item;
-        }
-
-        protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomMultiValueItem()
-        {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
-            {
-                Text = "Not available",
-                Visible = false
-            };
-
-            return item;
-        }
-        #endregion
     }
 }

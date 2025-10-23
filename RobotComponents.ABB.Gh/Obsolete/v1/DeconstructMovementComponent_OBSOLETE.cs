@@ -1,7 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
 
 // System Libs
 using System;
@@ -74,7 +72,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
                 // Check if the object is valid
                 if (!movement.IsValid)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Movement is not valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Movement is invalid");
                 }
 
                 // Output

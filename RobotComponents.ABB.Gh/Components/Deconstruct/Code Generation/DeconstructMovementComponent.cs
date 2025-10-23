@@ -1,11 +1,19 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2018-2020 EDEK Uni Kassel
+// Copyright (c) 2020-2025 Arjen Deetman
+//
+// Authors:
+//   - Gabriel Rumph (2018-2020)
+//   - Benedikt Wannemacher (2018-2020)
+//   - Arjen Deetman (2019-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
@@ -13,24 +21,19 @@ using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.ABB.Gh.Parameters.Actions.Instructions;
 using RobotComponents.ABB.Gh.Parameters.Actions.Declarations;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
-using RobotComponents.ABB.Gh.Utils;
 
 namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
 {
     /// <summary>
-    /// RobotComponents Deconstruct Movement component. An inherent from the GH_Component Class.
+    /// RobotComponents Deconstruct Movement component.
     /// </summary>
-    public class DeconstructMovementComponent : GH_Component
+    public class DeconstructMovementComponent : GH_RobotComponent
     {
         /// <summary>
         /// Initializes a new instance of the DeconstructMovement class.
         /// </summary>
-        public DeconstructMovementComponent()
-          : base("Deconstruct Move", "DeConMove",
-              "Deconstructs a Move component into its parameters."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Deconstruct")
+        public DeconstructMovementComponent() : base("Deconstruct Move", "DeConMove", "Deconstruct",
+              "Deconstructs a Move component into its parameters.")
         {
         }
 
@@ -75,7 +78,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
                 // Check if the object is valid
                 if (!movement.IsValid)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Movement is not valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Movement is invalid");
                 }
 
                 // Output
@@ -123,29 +126,6 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
         public override Guid ComponentGuid
         {
             get { return new Guid("BD74F43E-107B-4C6A-901F-7ADF2CE13039"); }
-        }
-        #endregion
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
         }
         #endregion
     }

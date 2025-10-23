@@ -1,12 +1,17 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2024-2025 Arjen Deetman
+//
+// Authors:
+//   - Arjen Deetman (2024-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
@@ -15,9 +20,9 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.Utilities
 {
     /// <summary>
-    /// RobotComponents Set Check Variable Names component. An inherent from the GH_Component Class.
+    /// RobotComponents Set Check Variable Names component.
     /// </summary>
-    public class CheckVariableNamesComponent : GH_Component
+    public class CheckVariableNamesComponent : GH_RobotComponent
     {
         #region fields
         private ObjectManager _objectManager;
@@ -27,11 +32,8 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
         /// <summary>
         /// Initializes a new instance of the SetCheckVariableNamesComponent class.
         /// </summary>
-        public CheckVariableNamesComponent()
-          : base("Check Variable Names", "CVN",
-              "Sets if the variable names should be checked for duplicates throughout this Grasshopper document."
-             + System.Environment.NewLine + System.Environment.NewLine + "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Utility")
+        public CheckVariableNamesComponent() : base("Check Variable Names", "CVN", "Utility",
+              "Sets if the variable names should be checked for duplicates throughout this Grasshopper document.")
         {
         }
 
@@ -163,29 +165,6 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
         public override Guid ComponentGuid
         {
             get { return new Guid("7E565209-881B-4800-8BB8-50AEFE823403"); }
-        }
-        #endregion
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
         }
         #endregion
     }

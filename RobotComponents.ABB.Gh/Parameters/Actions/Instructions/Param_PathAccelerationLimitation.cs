@@ -1,11 +1,16 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2024-2025 Arjen Deetman
+//
+// Authors:
+//   - Arjen Deetman (2024-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System;
-using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
@@ -16,17 +21,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     /// <summary>
     /// Path Acceleration Limitation parameter
     /// </summary>
-    public class Param_PathAccelerationLimitation : GH_PersistentParam<GH_PathAccelerationLimitation>
+    public class Param_PathAccelerationLimitation : GH_RobotParam<GH_PathAccelerationLimitation>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<GH_PathAccelerationLimitation> class
+        /// Initializes a new instance of the Param_PathAccelerationLimitation class
         /// </summary>
-        public Param_PathAccelerationLimitation()
-          : base(new GH_InstanceDescription("Path Acceleration Limitation Parameter", "PALP",
-                "Contains the data of a Path Acceleration Limitation instruction."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-                "Robot Components ABB", "Parameters"))
+        public Param_PathAccelerationLimitation() : base("Path Acceleration Limitation Parameter", "PALP", "Parameters",
+                "Contains the data of a Path Acceleration Limitation instruction.")
         {
         }
 
@@ -69,40 +70,5 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         {
             get { return new Guid("3502AF49-8CD5-4615-BD5F-94AADBBBD9C3"); }
         }
-
-        // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
-        #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_PathAccelerationLimitation> values)
-        {
-            return GH_GetterResult.cancel;
-        }
-
-        protected override GH_GetterResult Prompt_Singular(ref GH_PathAccelerationLimitation value)
-        {
-            return GH_GetterResult.cancel;
-        }
-
-        protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomSingleValueItem()
-        {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
-            {
-                Text = "Not available",
-                Visible = false
-            };
-
-            return item;
-        }
-
-        protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomMultiValueItem()
-        {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
-            {
-                Text = "Not available",
-                Visible = false
-            };
-
-            return item;
-        }
-        #endregion
     }
 }

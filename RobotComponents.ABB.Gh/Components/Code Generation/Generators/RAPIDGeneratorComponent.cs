@@ -1,7 +1,16 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2018-2020 EDEK Uni Kassel
+// Copyright (c) 2020-2025 Arjen Deetman
+//
+// Authors:
+//   - Gabriel Rumph (2018-2020)
+//   - Benedikt Wannemacher (2018-2020)
+//   - Arjen Deetman (2019-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System;
@@ -23,9 +32,9 @@ using RobotComponents.ABB.Gh.Parameters.Actions;
 namespace RobotComponents.ABB.Gh.Components.CodeGeneration
 {
     /// <summary>
-    /// RobotComponents Rapid Generator component. An inherent from the GH_Component Class.
+    /// RobotComponents Rapid Generator component.
     /// </summary>
-    public class RAPIDGeneratorComponent : GH_Component, IGH_VariableParameterComponent
+    public class RAPIDGeneratorComponent : GH_RobotComponent, IGH_VariableParameterComponent
     {
         #region fields
         private RAPIDGenerator _rapidGenerator = new RAPIDGenerator();
@@ -47,12 +56,8 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public RAPIDGeneratorComponent()
-          : base("RAPID Generator", "RG",
-              "Generates the RAPID module for the ABB robot controller."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Code Generation")
+        public RAPIDGeneratorComponent() : base("RAPID Generator", "RG", "Code Generation",
+              "Generates the RAPID module for the ABB robot controller.")
         {
             // Create the component label with a message
             Message = "EXTENDABLE";
@@ -305,8 +310,8 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             Menu_AppendItem(menu, "Output Work Object Data", MenuItemClickOutputWobjdata, true, _wobjdataOutputParam);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Save RAPID module to file", MenuItemClickSaveModule);
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
+
+            base.AppendAdditionalComponentMenuItems(menu);
         }
 
         /// <summary>
@@ -403,17 +408,6 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             RecordUndoEvent("Output Work Object Data");
             _wobjdataOutputParam = !_wobjdataOutputParam;
             AddOutputParameter(2);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
         }
 
         /// <summary>

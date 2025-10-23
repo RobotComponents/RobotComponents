@@ -1,7 +1,16 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2018-2020 EDEK Uni Kassel
+// Copyright (c) 2020-2025 Arjen Deetman
+//
+// Authors:
+//   - Gabriel Rumph (2018-2020)
+//   - Benedikt Wannemacher (2018-2020)
+//   - Arjen Deetman (2019-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // Grasshopper Libs
 using Grasshopper.Kernel;
@@ -12,7 +21,6 @@ using GH_IO.Serialization;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
-using RobotComponents.Utils;
 
 namespace RobotComponents.ABB.Gh.Goos.Definitions
 {
@@ -180,10 +188,26 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
             }
 
             //Cast to Robot Tool
-            if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTool)))
+            if (typeof(Q).IsAssignableFrom(typeof(RobotTool)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value.Tool; }
+                return true;
+            }
+
+            //Cast to Robot Kinematic Parameters Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_RobotKinematicParameters)))
+            {
+                if (Value == null) { target = (Q)(object)new GH_RobotKinematicParameters(); }
+                else { target = (Q)(object)new GH_RobotKinematicParameters(Value.RobotKinematicParameters); }
+                return true;
+            }
+
+            //Cast to Robot Kinematic Parameters
+            if (typeof(Q).IsAssignableFrom(typeof(RobotKinematicParameters)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value.RobotKinematicParameters; }
                 return true;
             }
 
@@ -357,7 +381,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
         {
             if (this.Value != null)
             {
-                byte[] array = Serialization.ObjectToByteArray(this.Value);
+                byte[] array = RobotComponents.Utils.Serialization.ObjectToByteArray(this.Value);
                 writer.SetByteArray(IoKey, array);
             }
 
@@ -378,7 +402,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
             }
 
             byte[] array = reader.GetByteArray(IoKey);
-            this.Value = (Robot)Serialization.ByteArrayToObject(array);
+            this.Value = (Robot)RobotComponents.Utils.Serialization.ByteArrayToObject(array);
 
             return true;
         }

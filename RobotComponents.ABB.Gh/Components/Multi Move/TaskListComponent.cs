@@ -1,12 +1,17 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2021-2025 Arjen Deetman
+//
+// Authors:
+//   - Arjen Deetman (2021-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
@@ -19,9 +24,9 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.MultiMove
 {
     /// <summary>
-    /// RobotComponents Action : Task List component. An inherent from the GH_Component Class.
+    /// RobotComponents Action : Task List component.
     /// </summary>
-    public class TaskListComponent : GH_Component, IObjectManager
+    public class TaskListComponent : GH_RobotComponent, IObjectManager
     {
         #region fields
         private GH_Structure<GH_TaskList> _tree = new GH_Structure<GH_TaskList>();
@@ -37,12 +42,8 @@ namespace RobotComponents.ABB.Gh.Components.MultiMove
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public TaskListComponent()
-          : base("Task List", "TL",
-              "Defines a collection of RAPID program tasks for a Task List declaration for Multi Move programming."
-               + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Multi Move")
+        public TaskListComponent() : base("Task List", "TL", "Multi Move",
+              "Defines a collection of RAPID program tasks for a Task List declaration for Multi Move programming.")
         {
         }
 
@@ -159,29 +160,6 @@ namespace RobotComponents.ABB.Gh.Components.MultiMove
         public override Guid ComponentGuid
         {
             get { return new Guid("41526484-136E-4391-9613-CB4F2798AA1C"); }
-        }
-        #endregion
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
         }
         #endregion
 

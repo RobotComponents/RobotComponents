@@ -1,7 +1,16 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2018-2020 EDEK Uni Kassel
+// Copyright (c) 2020-2024 Arjen Deetman
+//
+// Authors:
+//   - Gabriel Rumph (2018-2020)
+//   - Benedikt Wannemacher (2018-2020)
+//   - Arjen Deetman (2019-2024)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System;
@@ -136,7 +145,6 @@ namespace RobotComponents.ABB.Gh.Utils
         /// <summary>
         /// Creates the panel with the signal name and connects it to the input parameter
         /// </summary>
-        /// <param name="text"> Text to place inside the panel. </param>
         /// <param name="component"> Component to connect to. </param>
         /// <param name="text"> Text to place inside the panel. </param>
         /// <param name="index"> Index of the input to connect the panel to. </param>

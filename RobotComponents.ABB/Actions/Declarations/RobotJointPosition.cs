@@ -1,7 +1,14 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2020 EDEK Uni Kassel
+// Copyright (c) 2020-2025 Arjen Deetman
+//
+// Authors:
+//   - Arjen Deetman (2020-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System;
@@ -883,38 +890,6 @@ namespace RobotComponents.ABB.Actions.Declarations
             }
 
             return new RobotJointPosition(p1[0] / p2[0], p1[1] / p2[1], p1[2] / p2[2], p1[3] / p2[3], p1[4] / p2[4], p1[5] / p2[5]);
-        }
-        #endregion
-
-        #region obsolete
-
-        /// <summary>
-        /// Substracts the values of an Robot Joint Position from the values inside this Joint Position. 
-        /// </summary>
-        /// <remarks>
-        /// Value 1 - value 1, value 2 - value 2, value 3 - value 3 etc.
-        /// </remarks>
-        /// <param name="jointPosition"> The Robot Joint Position to be substracted. </param>
-        [Obsolete("This method is OBSOLETE and will be removed in vesion 4. Use Subtract instead.", false)]
-        public void Substract(RobotJointPosition jointPosition)
-        {
-            for (int i = 0; i < 6; i++)
-            {
-                this[i] -= jointPosition[i];
-            }
-        }
-
-        /// <summary>
-        /// Substracts a constant number from the values inside this Joint Position.
-        /// </summary>
-        /// <param name="value"> The number to be substracted. </param>
-        [Obsolete("This method is OBSOLETE and will be removed in vesion 4. Use Subtract instead.", false)]
-        public void Substract(double value)
-        {
-            for (int i = 0; i < 6; i++)
-            {
-                this[i] -= value;
-            }
         }
         #endregion
     }

@@ -1,7 +1,13 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2020-2025 Arjen Deetman
+//
+// Authors:
+//   - Arjen Deetman (2020-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System;
@@ -15,7 +21,6 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
-using RobotComponents.ABB.Gh.Utils;
 using RobotComponents.ABB.Presets;
 using RobotComponents.ABB.Presets.Forms;
 using RobotComponents.ABB.Presets.Enumerations;
@@ -23,21 +28,22 @@ using RobotComponents.ABB.Presets.Enumerations;
 namespace RobotComponents.ABB.Gh.Components.Definitions
 {
     /// <summary>
-    /// RobotComponents Robot Preset component. An inherent from the GH_Component Class.
+    /// RobotComponents Robot Preset component.
     /// </summary>
-    public class RobotPresetComponent : GH_Component
+    public class RobotPresetComponent : GH_RobotComponent
     {
         #region fields
         private RobotPreset _robotPreset = RobotPreset.EMPTY;
         private bool _fromMenu = false;
         #endregion
 
-        public RobotPresetComponent()
-          : base("Robot Preset", "RobPres",
-              "Defines a robot which is needed for code generation and simulation"
-             + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Definitions")
+        /// <summary>
+        /// Each implementation of GH_Component must provide a public constructor without any arguments.
+        /// Category represents the Tab in which the component will appear, Subcategory the panel. 
+        /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
+        /// </summary>
+        public RobotPresetComponent() : base("Robot Preset", "RobPres", "Definitions",
+              "Defines a robot which is needed for code generation and simulation.")
         {
             this.Message = "-";
         }
@@ -153,19 +159,8 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         {
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Pick Robot Preset", MenuItemClick);
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
 
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
+            base.AppendAdditionalComponentMenuItems(menu);
         }
 
         /// <summary>

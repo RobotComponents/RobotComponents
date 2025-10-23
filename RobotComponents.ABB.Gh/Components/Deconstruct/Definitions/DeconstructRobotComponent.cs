@@ -1,12 +1,20 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2018-2020 EDEK Uni Kassel
+// Copyright (c) 2020-2025 Arjen Deetman
+//
+// Authors:
+//   - Gabriel Rumph (2018-2020)
+//   - Benedikt Wannemacher (2018-2020)
+//   - Arjen Deetman (2019-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // Rhino Libs
@@ -14,14 +22,13 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
-using RobotComponents.ABB.Gh.Utils;
 
 namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
 {
     /// <summary>
-    /// RobotComponents Deconstruct Robot Info component. An inherent from the GH_Component Class.
+    /// RobotComponents Deconstruct Robot component.
     /// </summary>
-    public class DeconstructRobotComponent : GH_Component
+    public class DeconstructRobotComponent : GH_RobotComponent
     {
         #region fields
         private readonly List<Mesh> _meshes = new List<Mesh>() { };
@@ -29,14 +36,10 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the DeconstructrobotComponent class.
+        /// Initializes a new instance of the DeconstructRobotComponent class.
         /// </summary>
-        public DeconstructRobotComponent()
-          : base("Deconstruct Robot", "DeRob",
-              "Deconstructs a Robot component into its parameters"
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Deconstruct")
+        public DeconstructRobotComponent() : base("Deconstruct Robot", "DeRob", "Deconstruct",
+              "Deconstructs a Robot component into its parameters.")
         {
         }
 
@@ -55,10 +58,9 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
         {
             pManager.AddTextParameter("Name", "N", "Robot Name as String", GH_ParamAccess.item);
             pManager.AddMeshParameter("Meshes", "M", "Robot Meshes as Mesh List", GH_ParamAccess.list);
-            pManager.AddPlaneParameter("Axis Planes", "AP", "Axis Planes as Plane List", GH_ParamAccess.list);
+            pManager.RegisterParam(new Param_RobotKinematicParameters(), "Kinematic Parameters", "KP", "Robot Kinematic Parameter", GH_ParamAccess.item);
             pManager.AddIntervalParameter("Axis Limits", "AL", "Axis Limits as Interval List", GH_ParamAccess.list);
             pManager.AddPlaneParameter("Position Plane", "PP", "Position Plane of the Robot as Plane", GH_ParamAccess.item);
-            pManager.AddPlaneParameter("Mounting Frame", "MF", "Mounting Frame as Frame", GH_ParamAccess.item);
             pManager.RegisterParam(new Param_RobotTool(), "Robot Tool", "RT", "Robot Tool as Robot Tool", GH_ParamAccess.item);
             pManager.RegisterParam(new Param_ExternalAxis(), "External Axes", "EA", "External Axes as External Axis Parameter", GH_ParamAccess.list);
         }
@@ -89,7 +91,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
                 // Check if the input is valid
                 if (!robot.IsValid)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot is not valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot is invalid");
                 }
 
                 // Output meshes (only link meshes, no robot tool)
@@ -111,7 +113,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
                 }
                 else
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Tool is not Valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Tool is invalid");
                 }
 
                 for (int i = 0; i < robot.ExternalAxes.Count; i++)
@@ -123,19 +125,18 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
                     }
                     else
                     {
-                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Axis is not Valid");
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Axis is invalid");
                     }
                 }
 
                 // Output
                 DA.SetData(0, robot.Name);
                 DA.SetDataList(1, meshes);
-                DA.SetDataList(2, robot.InternalAxisPlanes);
+                DA.SetData(2, robot.RobotKinematicParameters);
                 DA.SetDataList(3, robot.InternalAxisLimits);
                 DA.SetData(4, robot.BasePlane);
-                DA.SetData(5, robot.MountingFrame);
-                DA.SetData(6, robot.Tool);
-                DA.SetDataList(7, robot.ExternalAxes);
+                DA.SetData(5, robot.Tool);
+                DA.SetDataList(6, robot.ExternalAxes);
             }
         }
 
@@ -170,30 +171,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("E651BA0F-7CE3-40BC-A04F-C76EA0665D1A"); }
-        }
-        #endregion
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
+            get { return new Guid("149A3904-0897-4E41-A133-6FB37DFC7B99"); }
         }
         #endregion
 

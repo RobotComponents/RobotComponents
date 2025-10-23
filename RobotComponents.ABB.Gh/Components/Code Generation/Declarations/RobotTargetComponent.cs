@@ -1,7 +1,16 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2020 EDEK Uni Kassel
+// Copyright (c) 2020-2025 Arjen Deetman
+//
+// Authors:
+//   - Gabriel Rumph (2020)
+//   - Benedikt Wannemacher (2020)
+//   - Arjen Deetman (2020-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System;
@@ -24,9 +33,9 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.CodeGeneration
 {
     /// <summary>
-    /// RobotComponents Action : Target component. An inherent from the GH_Component Class.
+    /// RobotComponents Action : Target component.
     /// </summary>
-    public class RobotTargetComponent : GH_Component, IGH_VariableParameterComponent, IObjectManager
+    public class RobotTargetComponent : GH_RobotComponent, IGH_VariableParameterComponent, IObjectManager
     {
         #region fields
         private GH_Structure<GH_RobotTarget> _tree = new GH_Structure<GH_RobotTarget>();
@@ -45,12 +54,8 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public RobotTargetComponent()
-          : base("Robot Target", "RT",
-              "Defines a Robot Target declaration for an Instruction : Movement or Inverse Kinematics component."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Code Generation")
+        public RobotTargetComponent() : base("Robot Target", "RT", "Code Generation",
+              "Defines a Robot Target declaration for a Move instruction or Inverse Kinematics component.")
         {
             // Create the component label with a message
             Message = "EXTENDABLE";
@@ -207,19 +212,8 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Reference Plane", MenuItemClickReferencePlane, true, _setReferencePlane);
             Menu_AppendItem(menu, "External Joint Position", MenuItemClickExternalJointPosition, true, _setExternalJointPosition);
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
 
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
+            base.AppendAdditionalComponentMenuItems(menu);
         }
 
         /// <summary>

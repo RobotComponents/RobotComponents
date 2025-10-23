@@ -1,34 +1,37 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2020 EDEK Uni Kassel
+// Copyright (c) 2020-2025 Arjen Deetman
+//
+// Authors:
+//   - Gabriel Rumph (2020)
+//   - Benedikt Wannemacher (2020)
+//   - Arjen Deetman (2020-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Gh.Parameters.Actions.Declarations;
-using RobotComponents.ABB.Gh.Utils;
 
 namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
 {
     /// <summary>
-    /// RobotComponents Deconstruct Target component. An inherent from the GH_Component Class.
+    /// RobotComponents Deconstruct Target component.
     /// </summary>
-    public class DeconstructRobotTargetComponent : GH_Component
+    public class DeconstructRobotTargetComponent : GH_RobotComponent
     {
         /// <summary>
         /// Initializes a new instance of the DeconstructTarget class.
         /// </summary>
-        public DeconstructRobotTargetComponent()
-          : base("Deconstruct Robot Target", "DeConRobTar",
-              "Deconstructs a Robot Target into its parameters."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Deconstruct")
+        public DeconstructRobotTargetComponent() : base("Deconstruct Robot Target", "DeConRobTar", "Deconstruct",
+              "Deconstructs a Robot Target into its parameters.")
         {
         }
 
@@ -68,7 +71,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
                 // Is Valid?
                 if (!target.IsValid)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Target is not valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Target is invalid");
                 }
 
                 // Output
@@ -111,29 +114,6 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
         public override Guid ComponentGuid
         {
             get { return new Guid("BD810C50-2530-4F3B-A693-B43BB49FDDF0"); }
-        }
-        #endregion
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
         }
         #endregion
     }

@@ -1,7 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
 
 // System Libs
 using System;
@@ -22,7 +20,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
     public class OldRobotToolParameter : GH_PersistentGeometryParam<GH_RobotTool>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<GH_RobotTool> class
+        /// Initializes a new instance of the RobotToolParameter class
         /// </summary>
         public OldRobotToolParameter()
           : base(new GH_InstanceDescription("Robot Tool", "RT",
@@ -83,16 +81,33 @@ namespace RobotComponents.ABB.Gh.Obsolete
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
+        /// <summary>
+        /// Disables picking of multiple values through the Grasshopper UI.
+        /// Always returns GH_GetterResult.cancel to block user interaction.
+        /// </summary>
+        /// <param name="values"> The list intended to store picked values (unused). </param>
+        /// <returns> GH_GetterResult.cancel to indicate the operation is canceled. </returns>
         protected override GH_GetterResult Prompt_Plural(ref List<GH_RobotTool> values)
         {
             return GH_GetterResult.cancel;
         }
 
+        /// <summary>
+        /// Disables picking of a single value through the Grasshopper UI.
+        /// Always returns GH_GetterResult.cancel to block user interaction.
+        /// </summary>
+        /// <param name="value"> The variable intended to store the picked value (unused). </param>
+        /// <returns> GH_GetterResult.cancel to indicate the operation is canceled. </returns>
         protected override GH_GetterResult Prompt_Singular(ref GH_RobotTool value)
         {
             return GH_GetterResult.cancel;
         }
 
+        /// <summary>
+        /// Overrides the context menu item for setting multiple values.
+        /// Returns a hidden menu item labeled "Not available".
+        /// </summary>
+        /// <returns> A hidden ToolStripMenuItem instance. </returns>
         protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomSingleValueItem()
         {
             System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
@@ -103,6 +118,11 @@ namespace RobotComponents.ABB.Gh.Obsolete
             return item;
         }
 
+        /// <summary>
+        /// Overrides the context menu item for setting multiple values.
+        /// Returns a hidden menu item labeled "Not available".
+        /// </summary>
+        /// <returns> A hidden ToolStripMenuItem instance. </returns>
         protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomMultiValueItem()
         {
             System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem

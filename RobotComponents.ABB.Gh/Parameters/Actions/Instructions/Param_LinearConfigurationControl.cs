@@ -1,11 +1,16 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2021-2025 Arjen Deetman
+//
+// Authors:
+//   - Arjen Deetman (2021-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System;
-using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
@@ -16,17 +21,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     /// <summary>
     /// Linear Configuration Control parameter
     /// </summary>
-    public class Param_LinearConfigurationControl : GH_PersistentParam<GH_LinearConfigurationControl>
+    public class Param_LinearConfigurationControl : GH_RobotParam<GH_LinearConfigurationControl>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<GH_LinearConfigurationControl> class
+        /// Initializes a new instance of the Param_LinearConfigurationControl class
         /// </summary>
-        public Param_LinearConfigurationControl()
-          : base(new GH_InstanceDescription("Linear Configuration Control Parameter", "LCCP",
-                "Contains the data of a Linear Configuration Control instruction."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-                "Robot Components ABB", "Parameters"))
+        public Param_LinearConfigurationControl() : base("Linear Configuration Control Parameter", "LCCP", "Parameters",
+                "Contains the data of a Linear Configuration Control instruction.")
         {
         }
 
@@ -69,42 +70,5 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         {
             get { return new Guid("80EDDE7B-30FB-4C70-B062-6FD6810830F1"); }
         }
-
-        // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
-        #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_LinearConfigurationControl> values)
-        {
-            return GH_GetterResult.cancel;
-        }
-
-        protected override GH_GetterResult Prompt_Singular(ref GH_LinearConfigurationControl value)
-        {
-            return GH_GetterResult.cancel;
-        }
-
-        protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomSingleValueItem()
-        {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
-            {
-                Text = "Not available",
-                Visible = false
-            };
-
-            return item;
-        }
-
-        protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomMultiValueItem()
-        {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
-            {
-                Text = "Not available",
-                Visible = false
-            };
-
-            return item;
-        }
-        #endregion
     }
-
-
 }

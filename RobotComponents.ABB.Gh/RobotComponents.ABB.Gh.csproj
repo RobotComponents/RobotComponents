@@ -5,6 +5,7 @@
     <RootNamespace>RobotComponents.ABB.Gh</RootNamespace>
     <AssemblyName>RobotComponents.ABB.Gh</AssemblyName>
     <OutputType>Library</OutputType>
+    <DocumentationFile>bin\RobotComponents.ABB.Gh.xml</DocumentationFile>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <IncludeSymbols>False</IncludeSymbols>
@@ -19,8 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="RhinoCommon" Version="7.0.20314.3001" />
-    <PackageReference Include="Grasshopper" Version="7.0.20314.3001" />
+    <PackageReference Include="RhinoCommon" Version="8.0.23304.9001" />
+    <PackageReference Include="Grasshopper" Version="8.0.23304.9001" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,6 +34,21 @@
 
   <ItemGroup>
     <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
   <Target Name="Rename" AfterTargets="AfterBuild" Condition="'$(ContinuePackingAfterGeneratingNuspec)' != 'true'">

@@ -1,11 +1,16 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2021-2025 Arjen Deetman
+//
+// Authors:
+//   - Arjen Deetman (2021-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System;
-using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
@@ -16,17 +21,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     /// <summary>
     /// Joint Configuration Control parameter
     /// </summary>
-    public class Param_JointConfigurationControl : GH_PersistentParam<GH_JointConfigurationControl>
+    public class Param_JointConfigurationControl : GH_RobotParam<GH_JointConfigurationControl>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<GH_JointConfigurationControl> class
+        /// Initializes a new instance of the Param_JointConfigurationControl class
         /// </summary>
-        public Param_JointConfigurationControl()
-          : base(new GH_InstanceDescription("Joint Configuration Control Parameter", "JCCP",
-                "Contains the data of a Joint Configuration Control instruction."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-                "Robot Components ABB", "Parameters"))
+        public Param_JointConfigurationControl()  : base("Joint Configuration Control Parameter", "JCCP", "Parameters",
+                "Contains the data of a Joint Configuration Control instruction.")
         {
         }
 
@@ -69,42 +70,5 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         {
             get { return new Guid("3CBD5E38-2C5D-4C06-A8CD-5938D7703D77"); }
         }
-
-        // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
-        #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_JointConfigurationControl> values)
-        {
-            return GH_GetterResult.cancel;
-        }
-
-        protected override GH_GetterResult Prompt_Singular(ref GH_JointConfigurationControl value)
-        {
-            return GH_GetterResult.cancel;
-        }
-
-        protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomSingleValueItem()
-        {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
-            {
-                Text = "Not available",
-                Visible = false
-            };
-
-            return item;
-        }
-
-        protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomMultiValueItem()
-        {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
-            {
-                Text = "Not available",
-                Visible = false
-            };
-
-            return item;
-        }
-        #endregion
     }
-
-
 }

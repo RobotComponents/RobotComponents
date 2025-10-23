@@ -1,34 +1,34 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2024-2025 Arjen Deetman
+//
+// Authors:
+//   - Arjen Deetman (2024-2025)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.ABB.Gh.Parameters.Actions.Instructions;
-using RobotComponents.ABB.Gh.Utils;
 
 namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
 {
     /// <summary>
-    /// RobotComponents Deconstruct Path Acceleration Limitation component. An inherent from the GH_Component Class.
+    /// RobotComponents Deconstruct Path Acceleration Limitation component.
     /// </summary>
-    public class DeconstructPathAccelerationLimitationComponent : GH_Component
+    public class DeconstructPathAccelerationLimitationComponent : GH_RobotComponent
     {
         /// <summary>
         /// Initializes a new instance of the DeconstructPathAccelerationLimitationComponent class.
         /// </summary>
-        public DeconstructPathAccelerationLimitationComponent()
-          : base("Deconstruct Path Acceleration Limitation", "DePaAcLi",
-              "Deconstructs a Path Acceleration Limitation into its parameters."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Deconstruct")
+        public DeconstructPathAccelerationLimitationComponent() : base("Deconstruct Path Acceleration Limitation", "DePaAcLi", "Deconstruct",
+              "Deconstructs a Path Acceleration Limitation into its parameters.")
         {
         }
 
@@ -68,7 +68,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
                 // Check if the object is valid
                 if (!pathAccelerationLimitation.IsValid)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Path Acceleration Limitation is not valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Path Acceleration Limitation is invalid");
                 }
 
                 // Output
@@ -111,29 +111,6 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
         public override Guid ComponentGuid
         {
             get { return new Guid("6D125379-6D2D-4CF0-98D7-2C30AB4C639D"); }
-        }
-        #endregion
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
         }
         #endregion
     }

@@ -1,7 +1,16 @@
-// This file is part of Robot Components. Robot Components is licensed 
-// under the terms of GNU General Public License version 3.0 (GPL v3.0)
-// as published by the Free Software Foundation. For more information and 
-// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+// SPDX-License-Identifier: GPL-3.0-or-later
+// This file is part of Robot Components
+// Project: https://github.com/RobotComponents/RobotComponents
+//
+// Copyright (c) 2018-2020 EDEK Uni Kassel
+// Copyright (c) 2020-2024 Arjen Deetman
+//
+// Authors:
+//   - Gabriel Rumph (2018-2020)
+//   - Benedikt Wannemacher (2018-2020)
+//   - Arjen Deetman (2019-2024)
+//
+// For license details, see the LICENSE file in the project root.
 
 // System Libs
 using System;
@@ -139,24 +148,24 @@ namespace RobotComponents.ABB.Kinematics
         {
             _opw.Signs = _signs;
             _opw.Offsets = _offsets;
-            _opw.A1 = _robot.A1;
-            _opw.A2 = _robot.A2;
-            _opw.B = _robot.B;
-            _opw.C1 = _robot.C1;
-            _opw.C2 = _robot.C2;
-            _opw.C3 = _robot.C3;
-            _opw.C4 = _robot.C4;
+            _opw.A1 = _robot.RobotKinematicParameters.A1;
+            _opw.A2 = _robot.RobotKinematicParameters.A2;
+            _opw.B = _robot.RobotKinematicParameters.B;
+            _opw.C1 = _robot.RobotKinematicParameters.C1;
+            _opw.C2 = _robot.RobotKinematicParameters.C2;
+            _opw.C3 = _robot.RobotKinematicParameters.C3;
+            _opw.C4 = _robot.RobotKinematicParameters.C4;
 
             _wok.Signs = _signs;
             _wok.Offsets = _offsets;
-            _wok.A1 = _robot.A1;
-            _wok.A2 = _robot.A2;
-            //_wok.A3 = _robot.A3;
-            _wok.B = _robot.B;
-            _wok.C1 = _robot.C1;
-            _wok.C2 = _robot.C2;
-            _wok.C3 = _robot.C3;
-            _wok.C4 = _robot.C4;
+            _wok.A1 = _robot.RobotKinematicParameters.A1;
+            _wok.A2 = _robot.RobotKinematicParameters.A2;
+            //_wok.A3 = _robot.RobotKinematicParameters.A3;
+            _wok.B = _robot.RobotKinematicParameters.B;
+            _wok.C1 = _robot.RobotKinematicParameters.C1;
+            _wok.C2 = _robot.RobotKinematicParameters.C2;
+            _wok.C3 = _robot.RobotKinematicParameters.C3;
+            _wok.C4 = _robot.RobotKinematicParameters.C4;
         }
 
         /// <summary>
@@ -215,7 +224,7 @@ namespace RobotComponents.ABB.Kinematics
             if (_movement.Target is RobotTarget robotTarget)
             {
                 // OPW kinematics solver
-                if (_robot.A3 == 0)
+                if (_robot.RobotKinematicParameters.A3 == 0)
                 {
                     // Calculate inverse kinematics
                     _opw.Inverse(_localEndPlane);

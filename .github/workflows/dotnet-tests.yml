@@ -1,4 +1,4 @@
-name: CI - Build & Test (.NET Framework 4.8)
+name: CI - Build, Test & Artifacts (.NET Framework 4.8)
 
 on:
   push:
@@ -27,13 +27,38 @@ jobs:
       - name: Build solution
         run: msbuild /t:Restore,Build /p:Configuration=Release
 
-      - name: Run tests (produce TRX)
+      - name: Run tests from RobotComponents.Tests
+        shell: pwsh
         run: |
-          vstest.console.exe **\*test*.dll /Logger:"trx;LogFileName=TestResults.trx"
-        continue-on-error: true  # allows job to continue even if tests fail
+          # Find vstest.console.exe installed with Visual Studio
+          $vstest = Get-ChildItem "C:\Program Files" -Recurse -Filter "vstest.console.exe" -ErrorAction SilentlyContinue | Select-Object -First 1
+          if (-not $vstest) {
+            Write-Error "vstest.console.exe not found on this runner."
+            exit 1
+          }
+
+          Write-Host "Using vstest.console.exe at: $($vstest.FullName)"
+
+          # Path to your test assembly
+          $testDll = "RobotComponents.Tests\bin\Release\RobotComponents.Tests.dll"
+
+          if (Test-Path $testDll) {
+            & "$($vstest.FullName)" $testDll /Logger:"trx;LogFileName=TestResults.trx"
+          } else {
+            Write-Error "Test DLL not found at $testDll"
+            exit 1
+          }
 
       - name: Upload test results artifact
         uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: '**/TestResults.trx'
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            **/bin/Release/**
+            !**/obj/**

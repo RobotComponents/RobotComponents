@@ -36,18 +36,20 @@ jobs:
             Write-Error "vstest.console.exe not found on this runner."
             exit 1
           }
-
           Write-Host "Using vstest.console.exe at: $($vstest.FullName)"
 
-          # Path to your test assembly
-          $testDll = "RobotComponents.Tests\bin\Release\RobotComponents.Tests.dll"
+          # Try to locate the test DLL automatically
+          $testDll = Get-ChildItem -Recurse "RobotComponents.Tests\bin" -Filter "RobotComponents.Tests.dll" -ErrorAction SilentlyContinue | 
+            Where-Object { $_.FullName -match "Release|Debug" -and $_.FullName -match "net48" } | 
+            Select-Object -First 1
 
-          if (Test-Path $testDll) {
-            & "$($vstest.FullName)" $testDll /Logger:"trx;LogFileName=TestResults.trx"
-          } else {
-            Write-Error "Test DLL not found at $testDll"
+          if (-not $testDll) {
+            Write-Error "Test DLL not found under RobotComponents.Tests\bin"
             exit 1
           }
+
+          Write-Host "Found test assembly at: $($testDll.FullName)"
+          & "$($vstest.FullName)" "$($testDll.FullName)" /Logger:"trx;LogFileName=TestResults.trx"
 
       - name: Upload test results artifact
         uses: actions/upload-artifact@v4

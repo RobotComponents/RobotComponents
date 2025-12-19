@@ -23,6 +23,7 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Kinematics;
 using RobotComponents.ABB.Actions.Declarations;
+using RobotComponents.ABB.Definitions.Attributes;
 
 namespace RobotComponents.ABB.Definitions
 {
@@ -47,6 +48,14 @@ namespace RobotComponents.ABB.Definitions
         private List<Plane> _externalAxisPlanes; // The external axis planes
         private List<Interval> _externalAxisLimits; // The external axis limit
         private RobotKinematicParameters _robotKinematicParameters; // Kinematics parameters
+
+        // Robot attributes
+        private BalancingDeviceRearBase _balancingDeviceRearBase = new BalancingDeviceRearBase();
+        private bool _hasBalancingDeviceRearBase = false;
+        private BalancingDeviceUpperArm _balancingDeviceUpperArm = new BalancingDeviceUpperArm();
+        private bool _hasBalancingDeviceUpperArm = false;
+        private ParallelRod _parallelRod = new ParallelRod();
+        private bool _hasParallelRod = false;
         #endregion
 
         #region (de)serialization
@@ -69,6 +78,18 @@ namespace RobotComponents.ABB.Definitions
             _externalAxisPlanes = (List<Plane>)info.GetValue("External Axis Planes", typeof(List<Plane>));
             _externalAxisLimits = (List<Interval>)info.GetValue("External Axis Limits", typeof(List<Interval>));
             _robotKinematicParameters = (RobotKinematicParameters)info.GetValue("Robot Kinematic Parameters", typeof(RobotKinematicParameters));
+
+            _balancingDeviceRearBase = (BalancingDeviceRearBase)info.GetValue("Balancing Device Rear Base", typeof(BalancingDeviceRearBase));
+            _hasBalancingDeviceRearBase = (bool)info.GetValue("Has Balancing Device Rear Base", typeof(bool));
+            //_balancingDeviceRearBase.Robot = this;
+
+            _balancingDeviceUpperArm = (BalancingDeviceUpperArm)info.GetValue("Balancing Device Upper Arm", typeof(BalancingDeviceUpperArm));
+            _hasBalancingDeviceUpperArm = (bool)info.GetValue("Has Balancing Device Upper Arm", typeof(bool));
+            //_balancingDeviceUpperArm.Robot = this;
+
+            _parallelRod = (ParallelRod)info.GetValue("Parallel Rod", typeof(ParallelRod));
+            _hasParallelRod = (bool)info.GetValue("Has Parallel Rod", typeof(bool));
+            //_parallelRod.Robot = this;
 
             _inverseKinematics = new InverseKinematics(this);
             _forwardKinematics = new ForwardKinematics(this);
@@ -96,6 +117,12 @@ namespace RobotComponents.ABB.Definitions
             info.AddValue("External Axis Planes", _externalAxisPlanes, typeof(List<Plane>));
             info.AddValue("External Axis Limits", _externalAxisLimits, typeof(List<Interval>));
             info.AddValue("Robot Kinematic Parameters", _robotKinematicParameters, typeof(RobotKinematicParameters));
+            info.AddValue("Balancing Device Rear Base", _balancingDeviceRearBase, typeof(BalancingDeviceRearBase));
+            info.AddValue("Has Balancing Device Rear Base", _hasBalancingDeviceRearBase, typeof(bool));
+            info.AddValue("Balancing Device Upper Arm", _balancingDeviceUpperArm, typeof(BalancingDeviceRearBase));
+            info.AddValue("Has Balancing Device Upper Arm", _hasBalancingDeviceUpperArm, typeof(bool));
+            info.AddValue("Parallel Rod", _parallelRod, typeof(ParallelRod));
+            info.AddValue("Has Parallel Rod", _hasParallelRod, typeof(bool));
         }
         #endregion
 

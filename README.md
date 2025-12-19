@@ -89,15 +89,20 @@ Please have a look at the open [issues](https://github.com/RobotComponents/Robot
 ## How to cite
 Robot Components is a free-to-use Grasshopper plugin, and we kindly ask you to cite it if used. By citing the software, you recognize the work that went into its development and allow us to track its usage, making it easier to secure funding for further improvements. More importantly, citing the software and providing details on the tools used ensures that results can be reproduced. See [How to cite and describe software](https://software.ac.uk/how-cite-software) for more details and an in-depth discussion.
 
-To cite all versions of Robot Components - as a reference to the whole project - in publications, use:
+For general references to this software package, the Zenodo record can be cited. The BibTeX entry is provided below:
 
-```
-Arjen Deetman, Gabriel Rumpf, Benedikt Wannemacher, Mohamed Dawod, Zuardin Akbar, & Andrea Rossi (2018). 
-Robot Components: Intuitive Robot Programming for ABB Robots inside of Rhinoceros Grasshopper.
-Zenodo. https://doi.org/10.5281/zenodo.5773814
+```bibtex
+@misc{RobotComponents,
+    title = {{R}obot {C}omponents: {I}ntuitive robot programming for {ABB} robots inside of {R}hinoceros {G}rasshopper},
+    author = {A. Deetman and G. Rumpf and B. Wannemacher and M. Dawod, Z. Akbar and A. Rossi},
+    publisher = {Zenodo},
+    year = {2018},
+    doi = {10.5281/zenodo.5773814},
+    note = {Zenodo. doi:10.5281/zenodo.5773814}
+}
 ```
 
-On our [Zenodo page](https://doi.org/10.5281/zenodo.5773814) you can find how to cite specific versions.
+On our [Zenodo page](https://doi.org/10.5281/zenodo.5773814), you can find how to cite specific versions.
 
 ## Version numbering
 Robot Components uses the following [Semantic Versioning](https://semver.org/) scheme: 

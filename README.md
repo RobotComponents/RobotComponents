@@ -34,6 +34,7 @@ After downloading, unzip the archive and copy all files into the Grasshopper Com
 
 Robot Components supports the following Rhino versions:  
 
+- **Version 4 (v4):** Compatible with Rhino 8 or higher. 
 - **Version 3 (v3):** Compatible with Rhino 7 or higher.  
 - **Version 2 (v2):** Compatible with Rhino 6 or higher.  
 - **Version 1 (v1):** Compatible with Rhino 5 or higher.

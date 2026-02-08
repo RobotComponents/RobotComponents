@@ -134,7 +134,7 @@ namespace RobotComponents.ABB.Definitions
             _a1 = planes[1].Origin.X;
             _a2 = -(planes[4].Origin.Z - planes[2].Origin.Z);
             _a3 = -(planes[5].Origin.Z - planes[4].Origin.Z);
-            _b = planes[0].Origin.Y - planes[5].Origin.Y;
+            _b = planes[5].Origin.Y - planes[0].Origin.Y;
             _c1 = planes[1].Origin.Z;
             _c2 = planes[2].Origin.Z - planes[1].Origin.Z;
             _c3 = planes[4].Origin.X - planes[2].Origin.X;
@@ -194,9 +194,9 @@ namespace RobotComponents.ABB.Definitions
             planes[0] = new Plane(new Point3d(0, 0, 0), new Vector3d(0, 0, 1));
             planes[1] = new Plane(new Point3d(_a1, 0, _c1), new Vector3d(0, 1, 0));
             planes[2] = new Plane(new Point3d(_a1, 0, _c1 + _c2), new Vector3d(0, 1, 0));
-            planes[3] = new Plane(new Point3d(_a1, -_b, _c1 + _c2 - _a2), new Vector3d(1, 0, 0));
-            planes[4] = new Plane(new Point3d(_a1 + _c3, -_b, _c1 + _c2 - _a2), new Vector3d(0, 1, 0));
-            planes[5] = new Plane(new Point3d(_a1 + _c3 + _c4, -_b, _c1 + _c2 - _a2 - _a3), new Vector3d(1, 0, 0));
+            planes[3] = new Plane(new Point3d(_a1, _b, _c1 + _c2 - _a2), new Vector3d(1, 0, 0));
+            planes[4] = new Plane(new Point3d(_a1 + _c3, _b, _c1 + _c2 - _a2), new Vector3d(0, 1, 0));
+            planes[5] = new Plane(new Point3d(_a1 + _c3 + _c4, _b, _c1 + _c2 - _a2 - _a3), new Vector3d(1, 0, 0));
             mountingFrame = new Plane(new Point3d(planes[5].Origin), -Vector3d.ZAxis, Vector3d.YAxis);
 
             Transform orient = Transform.PlaneToPlane(Plane.WorldXY, basePlane);

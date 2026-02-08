@@ -2,10 +2,10 @@
 // This file is part of Robot Components
 // Project: https://github.com/RobotComponents/RobotComponents
 //
-// Copyright (c) 2025 Arjen Deetman
+// Copyright (c) 2025-2026 Arjen Deetman
 //
 // Authors:
-//   - Arjen Deetman (2025)
+//   - Arjen Deetman (2025-2026)
 //
 // For license details, see the LICENSE file in the project root.
 

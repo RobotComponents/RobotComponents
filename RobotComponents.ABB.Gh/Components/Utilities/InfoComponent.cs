@@ -8,7 +8,7 @@
 // Authors:
 //   - Gabriel Rumph (2018-2020)
 //   - Benedikt Wannemacher (2018-2020)
-//   - Arjen Deetman (2019-2025)
+//   - Arjen Deetman (2019-2026)
 //
 // For license details, see the LICENSE file in the project root.
 
@@ -81,7 +81,7 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
                 + Environment.NewLine
                 + "Copyright (c) 2018-2020 EDEK Uni Kassel"
                 + Environment.NewLine
-                + "Copyright (c) 2020-2025 Arjen Deetman"
+                + "Copyright (c) 2020-2026 Arjen Deetman"
                 + Environment.NewLine
                 + Environment.NewLine
                 + "Robot Components is free software; you can redistribute it and/or modify it under "

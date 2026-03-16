@@ -70,6 +70,8 @@ Robot Components integrates the ABB PC SDK for real-time communication with ABB 
 
 Robot Components utilizes the OPW kinematics solver, as described in the paper ['_An Analytical Solution of the Inverse Kinematics Problem of Industrial Serial Manipulators with an Ortho-parallel Basis and a Spherical Wrist_'](https://www.researchgate.net/publication/264212870_An_Analytical_Solution_of_the_Inverse_Kinematics_Problem_of_Industrial_Serial_Manipulators_with_an_Ortho-parallel_Basis_and_a_Spherical_Wrist) by Mathias Brandstötter, Arthur Angerer, and Michael Hofbaur.
 
+For the GoFa series, Robot Components uses the [Wristy Twisty Solver](https://github.com/RobotComponents/WristyTwistySolver) developed by [Arjen Deetman](http://www.arjendeetman.nl). This kinematics solver is derived from the framework provided in the paper entitled ['_Geometrical Approach to the Inverse Kinematics of 6R Serial Robots With Offset Wrists_']( https://asmedigitalcollection.asme.org/IDETC-CIE/proceedings-abstract/IDETC-CIE2015/57144/V05CT08A016/257391) by Cuong Trinh, Dimiter Zlatanov, Matteo Zoppi, and Rezia Molfino.
+
 We would like to acknowledge [Jose Luis Garcia del Castillo](https://github.com/garciadelcastillo) and [Vicente Soler](https://github.com/visose) for their Grasshopper plugins [RobotExMachina](https://github.com/RobotExMachina) and [Robots](https://github.com/visose/Robots). While our approach differs, it was helpful for us to see how they implemented certain functionalities and approached certain issues. 
 
 ## Known Issues

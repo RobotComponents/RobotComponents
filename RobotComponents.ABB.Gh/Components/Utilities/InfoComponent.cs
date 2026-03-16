@@ -59,21 +59,28 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
         {
             // Declare info
             string text = "Robot Components is a plugin for intuitive robot programming for ABB robots inside Rhinoceros Grasshopper. "
-                + "This open source project was initiated by the chair of Experimental and Digital Design and Construction (EDEK) "
-                + "of the University of Kassel. The technical development is executed by Arjen Deetman, Gabriel Rumpf, Benedikt Wannemacher, "
-                + "Mohamed Dawod, Zuardin Akbar, and Andrea Rossi."
+                + "This open source project was initiated by the chair of Experimental and Digital Design and Construction (EDEK) of the University of Kassel. "
+                + "The plugin is currently being actively developed and maintained by Arjen Deetman. "
+                + "A complete list of developers and contributors is available in the GitHub repository."
                 + Environment.NewLine
                 + Environment.NewLine
                 + "----------"
                 + Environment.NewLine
                 + Environment.NewLine
-                + "The components of the controller utility category use the ABB PC SDK (version 2024.1). For more information, see https://developercenter.robotstudio.com/pc-sdk."
+                + "The components of the controller utility category use the ABB PC SDK (version 2025.3). "
+                + "For more information, see https://developercenter.robotstudio.com/pc-sdk."
                 + Environment.NewLine
                 + Environment.NewLine
                 + "Robot Components uses the OPW kinematics solver as described in the paper "
                 + "'An Analytical Solution of the Inverse Kinematics Problem of Industrial Serial "
                 + "Manipulators with an Ortho-parallel Basis and a Spherical Wrist' by Mathias "
                 + "Brandstötter, Arthur Angerer, and Michael Hofbaur."
+                + Environment.NewLine
+                + Environment.NewLine
+                + "For the GoFa series, Robot Components uses the Wristy Twisty Solver developed by Arjen Deetman. " 
+                + "This kinematics solver is derived from the framework provided in the paper entitled "
+                + "'Geometrical Approach to the Inverse Kinematics of 6R Serial Robots With Offset Wrists' " 
+                + "by Cuong Trinh, Dimiter Zlatanov, Matteo Zoppi, and Rezia Molfino."
                 + Environment.NewLine
                 + Environment.NewLine
                 + "----------"

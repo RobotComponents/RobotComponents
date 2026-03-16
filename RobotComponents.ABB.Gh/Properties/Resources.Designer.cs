@@ -1033,6 +1033,16 @@ namespace RobotComponents.ABB.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap kofi_symbol {
+            get {
+                object obj = ResourceManager.GetObject("kofi_symbol", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap LinearConfigurationControl_Icon {
             get {
                 object obj = ResourceManager.GetObject("LinearConfigurationControl_Icon", resourceCulture);

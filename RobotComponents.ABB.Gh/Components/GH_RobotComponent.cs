@@ -2,10 +2,10 @@
 // This file is part of Robot Components
 // Project: https://github.com/RobotComponents/RobotComponents
 //
-// Copyright (c) 2025 Arjen Deetman
+// Copyright (c) 2025-2026 Arjen Deetman
 //
 // Authors:
-//   - Arjen Deetman (2025)
+//   - Arjen Deetman (2025-2026)
 //
 // For license details, see the LICENSE file in the project root.
 
@@ -55,6 +55,8 @@ namespace RobotComponents.ABB.Gh.Components
         {
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
+            Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Support me on Ko-fi", MenuItemClickComponentKofi, Properties.Resources.kofi_symbol);
         }
 
         /// <summary>
@@ -65,6 +67,17 @@ namespace RobotComponents.ABB.Gh.Components
         internal void MenuItemClickComponentDoc(object sender, EventArgs e)
         {
             string url = Documentation.ComponentWeblinks[this.GetType()];
+            Documentation.OpenBrowser(url);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Support me on Ko-fi" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        internal void MenuItemClickComponentKofi(object sender, EventArgs e)
+        {
+            string url = "https://ko-fi.com/arjendeetman";
             Documentation.OpenBrowser(url);
         }
         #endregion

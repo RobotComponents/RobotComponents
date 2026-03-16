@@ -39,8 +39,11 @@
 	"description": "Robot Components is a plugin for intuitive robot programming for ABB robots inside of Rhinoceros Grasshopper. Robot Components offers a wide set of tools to create tool paths, simulate robotic motion, and generate RAPID code within Grasshopper.",
 
 	"references": [
-      		"Brandstötter, M., Angerer, A. & Hofbaur, M. (2014). An Analytical Solution of the Inverse Kinematics Problem of Industrial Serial Manipulators with an Ortho-parallel Basis and a Spherical Wrist. In: Proceedings of the Austrian Robotics Workshop, Linz, Austria."
-    	], 
+		"Brandstötter, M., Angerer, A., Hofbaur, M. (2014). An Analytical Solution of the Inverse Kinematics Problem of Industrial Serial Manipulators with an Ortho-parallel Basis and a Spherical Wrist. In: Proceedings of the Austrian Robotics Workshop, Linz, Austria.",
+		"Trinh, C., Zlatanov, D., Zoppi, M., Molfino, R. (2015). Geometrical Approach to the Inverse Kinematics of 6R Serial Robots With Offset Wrists. In: Proceedings of the ASME 2015 International Design Engineering Technical Conferences and Computers and Information in Engineering Conference. Volume 5C: 39th Mechanisms and Robotics Conference. Boston, Massachusetts, USA. August 2–5, 2015. V05CT08A016. ASME. https://doi.org/10.1115/DETC2015-47950",
+		"Meyer, J. (2017-2025). OPW Kinematics: Closed form IK for parallel base, spherical wrist industrial manipulators. GitHub repository. Available at: https://github.com/Jmeyer1292/opw_kinematics",
+		"Deetman, A. (2024-2026) Wristy Twisty Solver: An open-source kinematics solver for 6R robots with wrist offset. GitHub repository. Available at: https://github.com/RobotComponents/WristyTwistySolver"
+		],
 	
 	"keywords": [
 		"robots",

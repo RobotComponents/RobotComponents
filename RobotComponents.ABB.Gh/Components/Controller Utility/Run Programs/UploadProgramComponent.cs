@@ -2,10 +2,10 @@
 // This file is part of Robot Components
 // Project: https://github.com/RobotComponents/RobotComponents
 //
-// Copyright (c) 2022-2025 Arjen Deetman
+// Copyright (c) 2022-2026 Arjen Deetman
 //
 // Authors:
-//   - Arjen Deetman (2022-2025)
+//   - Arjen Deetman (2022-2026)
 //
 // For license details, see the LICENSE file in the project root.
 
@@ -164,7 +164,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
         {
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Pick Task", MenuItemClick);
+            Menu_AppendItem(menu, "Pick Task", MenuItemClick, Properties.Resources.PickItem_Icon);
 
             base.AppendAdditionalComponentMenuItems(menu);
         }

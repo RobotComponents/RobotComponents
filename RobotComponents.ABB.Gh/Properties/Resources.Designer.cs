@@ -1059,7 +1059,19 @@ namespace RobotComponents.ABB.Gh.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PickItem_Icon
+        {
+            get
+            {
+                object obj = ResourceManager.GetObject("PickItem_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
@@ -1179,7 +1191,7 @@ namespace RobotComponents.ABB.Gh.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        
+                
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>

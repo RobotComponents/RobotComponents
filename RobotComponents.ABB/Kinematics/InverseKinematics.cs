@@ -3,12 +3,12 @@
 // Project: https://github.com/RobotComponents/RobotComponents
 //
 // Copyright (c) 2018-2020 EDEK Uni Kassel
-// Copyright (c) 2020-2024 Arjen Deetman
+// Copyright (c) 2020-2026 Arjen Deetman
 //
 // Authors:
 //   - Gabriel Rumph (2018-2020)
 //   - Benedikt Wannemacher (2018-2020)
-//   - Arjen Deetman (2019-2024)
+//   - Arjen Deetman (2019-2026)
 //
 // For license details, see the LICENSE file in the project root.
 
@@ -76,7 +76,7 @@ namespace RobotComponents.ABB.Kinematics
         private static readonly int[] _order = new int[8] { 0, 4, 1, 5, 2, 6, 3, 7 };
         private static readonly int[] _signs = new int[6] { 1, 1, 1, 1, 1, 1 };
         private readonly OPWKinematics _opw = new OPWKinematics();
-        private readonly OPWKinematics _wok = new OPWKinematics();
+        private readonly WristyTwistySolver _wristy = new WristyTwistySolver();
         private int _selectedSolution = -1;
         #endregion
 
@@ -156,16 +156,16 @@ namespace RobotComponents.ABB.Kinematics
             _opw.C3 = _robot.RobotKinematicParameters.C3;
             _opw.C4 = _robot.RobotKinematicParameters.C4;
 
-            _wok.Signs = _signs;
-            _wok.Offsets = _offsets;
-            _wok.A1 = _robot.RobotKinematicParameters.A1;
-            _wok.A2 = _robot.RobotKinematicParameters.A2;
-            //_wok.A3 = _robot.RobotKinematicParameters.A3;
-            _wok.B = _robot.RobotKinematicParameters.B;
-            _wok.C1 = _robot.RobotKinematicParameters.C1;
-            _wok.C2 = _robot.RobotKinematicParameters.C2;
-            _wok.C3 = _robot.RobotKinematicParameters.C3;
-            _wok.C4 = _robot.RobotKinematicParameters.C4;
+            _wristy.Signs = _signs;
+            _wristy.Offsets = _offsets;
+            _wristy.A1 = _robot.RobotKinematicParameters.A1;
+            _wristy.A2 = _robot.RobotKinematicParameters.A2;
+            _wristy.A3 = _robot.RobotKinematicParameters.A3;
+            _wristy.B = _robot.RobotKinematicParameters.B;
+            _wristy.C1 = _robot.RobotKinematicParameters.C1;
+            _wristy.C2 = _robot.RobotKinematicParameters.C2;
+            _wristy.C3 = _robot.RobotKinematicParameters.C3;
+            _wristy.C4 = _robot.RobotKinematicParameters.C4;
         }
 
         /// <summary>
@@ -254,23 +254,23 @@ namespace RobotComponents.ABB.Kinematics
                 else
                 {
                     // Calculate inverse kinematics
-                    _wok.Inverse(_localEndPlane);
+                    _wristy.Inverse(_localEndPlane);
 
                     // Set Robot Joint Positions
                     for (int i = 0; i < 8; i++)
                     {
                         for (int j = 0; j < 6; j++)
                         {
-                            _robotJointPositions[i][j] = _rad2deg * _wok.Solutions[_order[i]][j];
+                            _robotJointPositions[i][j] = _rad2deg * _wristy.Solutions[_order[i]][j];
                         }
                     }
 
                     // Select solution
                     _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx].Duplicate();
 
-                    _wristSingularities = _order.Select(index => _wok.IsWristSingularity[index]).ToArray();
-                    _elbowSingularities = _order.Select(index => _wok.IsElbowSingularity[index]).ToArray();
-                    _shoulderSingularities = _order.Select(index => _wok.IsShoulderSingularity[index]).ToArray();
+                    _wristSingularities = _order.Select(index => _wristy.IsWristSingularity[index]).ToArray();
+                    _elbowSingularities = _order.Select(index => _wristy.IsElbowSingularity[index]).ToArray();
+                    _shoulderSingularities = _order.Select(index => _wristy.IsShoulderSingularity[index]).ToArray();
 
                     _wristSingularity = _wristSingularities[robotTarget.ConfigurationData.Cfx];
                     _elbowSingularity = _elbowSingularities[robotTarget.ConfigurationData.Cfx];

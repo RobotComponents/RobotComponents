@@ -2,10 +2,10 @@
 // This file is part of Robot Components
 // Project: https://github.com/RobotComponents/RobotComponents
 //
-// Copyright (c) 2023-2025 Arjen Deetman
+// Copyright (c) 2023-2026 Arjen Deetman
 //
 // Authors:
-//   - Arjen Deetman (2023-2025)
+//   - Arjen Deetman (2023-2026)
 //
 // For license details, see the LICENSE file in the project root.
 
@@ -304,21 +304,21 @@ namespace RobotComponents.ABB.Presets.Enumerations
         /// <summary>
         /// IRB6640-185/2.80
         /// </summary>
-        IRB6640_185_280
+        IRB6640_185_280,
 
-        // <summary>
-        // CRB15000-5/0.95
-        // </summary>
-        //CRB15000_5_095,
+        ///<summary>
+        ///CRB15000-5/0.95
+        ///</summary>
+        CRB15000_5_095,
 
-        // <summary>
-        // CRB15000-12/1.27
-        // </summary>
-        //CRB15000_12_127,
+        /// <summary>
+        /// CRB15000-12/1.27
+        /// </summary>
+        CRB15000_12_127,
 
-        // <summary>
-        // CRB15000-10/1.52
-        // </summary>
-        //CRB15000_10_152
+        /// <summary>
+        /// CRB15000-10/1.52
+        /// </summary>
+        CRB15000_10_152
     }
 }

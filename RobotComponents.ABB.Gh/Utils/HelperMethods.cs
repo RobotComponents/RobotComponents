@@ -138,9 +138,10 @@ namespace RobotComponents.ABB.Gh.Utils
         {
             isReplaced = text.Contains(" ") || text.Contains("\n") || text.Contains("\r");
 
-            string result = text.Replace(" ", "_");
-            result = result.Replace("\n", "");
+            string result = text.Replace("\n", "");
             result = result.Replace("\r", "");
+            result = result.TrimStart(' ');
+            result = result.Replace(" ", "_");
 
             return result;
         }

@@ -124,6 +124,20 @@ namespace RobotComponents.ABB.Gh.Utils
         /// <returns> The new string. </returns>
         public static string ReplaceSpacesAndRemoveNewLines(string text)
         {
+            return ReplaceSpacesAndRemoveNewLines(text, out _);
+        }
+
+        /// <summary>
+        /// Replaces the spaces with an underscore and removes new lines in a string. 
+        /// Typically used to edit variable names of declarations.
+        /// </summary>
+        /// <param name="text"> The string. </param>
+        /// <param name="isReplaced"> Returns true if the string was modified; otherwise, false. </param>
+        /// <returns> The new string. </returns>
+        public static string ReplaceSpacesAndRemoveNewLines(string text, out bool isReplaced)
+        {
+            isReplaced = text.Contains(' ') || text.Contains('\n') || text.Contains('\r');
+
             string result = text.Replace(" ", "_");
             result = result.Replace("\n", "");
             result = result.Replace("\r", "");

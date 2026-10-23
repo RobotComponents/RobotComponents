@@ -2,10 +2,10 @@
 // This file is part of Robot Components
 // Project: https://github.com/RobotComponents/RobotComponents
 //
-// Copyright (c) 2020-2024 Arjen Deetman
+// Copyright (c) 2020-2026 Arjen Deetman
 //
 // Authors:
-//   - Arjen Deetman (2021-2024)
+//   - Arjen Deetman (2021-2026)
 //
 // For license details, see the LICENSE file in the project root.
 
@@ -119,6 +119,13 @@ namespace RobotComponents.ABB.Gh.Utils
                             break;
                         }
 
+                        // Checks if variable name starts with an underscore
+                        if (HelperMethods.StringStartsWithUnderscore(managedComponent.ToRegister[i]))
+                        {
+                            component.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Variable name starts with an underscore which is not allowed in RAPID Code.");
+                            break;
+                        }
+
                         // Checks if variable name starts with a number
                         if (HelperMethods.StringStartsWithNumber(managedComponent.ToRegister[i]))
                         {
@@ -145,6 +152,13 @@ namespace RobotComponents.ABB.Gh.Utils
                         if (HelperMethods.StringExeedsCharacterLimit32(managedComponent.ToRegister[i]))
                         {
                             component.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Variable name exceeds character limit of 32 characters.");
+                            break;
+                        }
+
+                        // Checks if variable name starts with an underscore
+                        if (HelperMethods.StringStartsWithUnderscore(managedComponent.ToRegister[i]))
+                        {
+                            component.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Variable name starts with an underscore which is not allowed in RAPID Code.");
                             break;
                         }
 

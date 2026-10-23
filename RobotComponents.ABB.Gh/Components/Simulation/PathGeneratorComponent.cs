@@ -346,7 +346,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("8EFB8932-41EB-48EF-8B09-798843A8610C"); }
+            get { return new Guid("AD47879C-5127-47DE-966D-D8AEBFB7DC61"); }
         }
         #endregion
 

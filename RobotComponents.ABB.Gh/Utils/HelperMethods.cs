@@ -136,7 +136,7 @@ namespace RobotComponents.ABB.Gh.Utils
         /// <returns> The new string. </returns>
         public static string ReplaceSpacesAndRemoveNewLines(string text, out bool isReplaced)
         {
-            isReplaced = text.Contains(' ') || text.Contains('\n') || text.Contains('\r');
+            isReplaced = text.Contains(" ") || text.Contains("\n") || text.Contains("\r");
 
             string result = text.Replace(" ", "_");
             result = result.Replace("\n", "");
